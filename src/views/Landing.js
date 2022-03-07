@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import Navbar from "components/Navbars/AuthNavbar.js";
 import Footer from "components/Footers/Footer.js";
 
+// line 108 아래로는 검사지
 export default function Landing() {
   return (
     <>
@@ -27,19 +28,26 @@ export default function Landing() {
           <div className="container relative mx-auto">
             <div className="items-center flex flex-wrap">
               <div className="w-full lg:w-6/12 px-4 ml-auto mr-auto text-center">
-                <div className="pr-12">
+                <Link to="/search">
+                  <button
+                    className="text-emerald-500 bg-transparent border border-solid border-emerald-500 hover:bg-emerald-500 hover:text-white active:bg-emerald-600 font-bold uppercase px-8 py-3 rounded outline-none focus:outline-none mr-1 mb-8 ease-linear transition-all duration-150"
+                    type="button"
+                  >
+                    이름
+                  </button>
+                </Link>
+                <div className="py-12">
                   <h1 className="text-white font-semibold text-5xl">
-                    Your story starts with us.
+                    검사 시작하기
                   </h1>
                   <p className="mt-4 text-lg text-blueGray-200">
-                    This is a simple example of a Landing Page you can build
-                    using Notus React. It features multiple CSS components based
-                    on the Tailwind CSS design system.
+                    지금부터 시작합니다!
                   </p>
                 </div>
               </div>
             </div>
           </div>
+
           <div
             className="top-auto bottom-0 left-0 right-0 w-full absolute pointer-events-none overflow-hidden h-70-px"
             style={{ transform: "translateZ(0)" }}
@@ -70,10 +78,9 @@ export default function Landing() {
                     <div className="text-white p-3 text-center inline-flex items-center justify-center w-12 h-12 mb-5 shadow-lg rounded-full bg-red-400">
                       <i className="fas fa-award"></i>
                     </div>
-                    <h6 className="text-xl font-semibold">Awarded Agency</h6>
+                    <h6 className="text-xl font-semibold">주의 사항 1</h6>
                     <p className="mt-2 mb-4 text-blueGray-500">
-                      Divide details about your product or agency work into
-                      parts. A paragraph describing a feature will be enough.
+                      가능하면 오래 생각하지 마십시오.
                     </p>
                   </div>
                 </div>
@@ -85,10 +92,9 @@ export default function Landing() {
                     <div className="text-white p-3 text-center inline-flex items-center justify-center w-12 h-12 mb-5 shadow-lg rounded-full bg-lightBlue-400">
                       <i className="fas fa-retweet"></i>
                     </div>
-                    <h6 className="text-xl font-semibold">Free Revisions</h6>
+                    <h6 className="text-xl font-semibold">주의 사항 2</h6>
                     <p className="mt-2 mb-4 text-blueGray-500">
-                      Keep you user engaged by providing meaningful information.
-                      Remember that by this time, the user is curious.
+                      중립은 지양하는 것이 좋습니다.
                     </p>
                   </div>
                 </div>
@@ -100,10 +106,9 @@ export default function Landing() {
                     <div className="text-white p-3 text-center inline-flex items-center justify-center w-12 h-12 mb-5 shadow-lg rounded-full bg-emerald-400">
                       <i className="fas fa-fingerprint"></i>
                     </div>
-                    <h6 className="text-xl font-semibold">Verified Company</h6>
+                    <h6 className="text-xl font-semibold">주의 사항 3</h6>
                     <p className="mt-2 mb-4 text-blueGray-500">
-                      Write a few lines about each one. A paragraph describing a
-                      feature will be enough. Keep you user engaged!
+                      최대한 솔직하게 답변해주십시오.
                     </p>
                   </div>
                 </div>

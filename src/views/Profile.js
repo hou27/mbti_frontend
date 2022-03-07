@@ -61,7 +61,7 @@ export default function Profile() {
                         className="bg-lightBlue-500 active:bg-lightBlue-600 uppercase text-white font-bold hover:shadow-md shadow text-xs px-4 py-2 rounded outline-none focus:outline-none sm:mr-2 mb-1 ease-linear transition-all duration-150"
                         type="button"
                       >
-                        Connect
+                        검사하기
                       </button>
                     </div>
                   </div>
@@ -72,15 +72,15 @@ export default function Profile() {
                           22
                         </span>
                         <span className="text-sm text-blueGray-400">
-                          Friends
+                          Researchers
                         </span>
                       </div>
                       <div className="mr-4 p-3 text-center">
                         <span className="text-xl font-bold block uppercase tracking-wide text-blueGray-600">
-                          10
+                          3
                         </span>
                         <span className="text-sm text-blueGray-400">
-                          Photos
+                          MBTI variety
                         </span>
                       </div>
                       <div className="lg:mr-4 p-3 text-center">
@@ -104,7 +104,7 @@ export default function Profile() {
                   </div>
                   <div className="mb-2 text-blueGray-600 mt-10">
                     <i className="fas fa-briefcase mr-2 text-lg text-blueGray-400"></i>
-                    Solution Manager - Creative Tim Officer
+                    ENTJ
                   </div>
                   <div className="mb-2 text-blueGray-600">
                     <i className="fas fa-university mr-2 text-lg text-blueGray-400"></i>
