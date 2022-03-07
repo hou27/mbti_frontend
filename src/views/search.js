@@ -1,179 +1,462 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import PropTypes from "prop-types";
+import IndexNavbar from "components/Navbars/IndexNavbar.js";
+import Footer from "components/Footers/Footer.js";
 
 // components
 
-import Navbar from "components/Navbars/AuthNavbar.js";
-import Footer from "components/Footers/Footer.js";
+import TableDropdown from "components/Dropdowns/TableDropdown.js";
 
-export default function Search() {
+export default function Search({ color }) {
   return (
     <>
-      <Navbar transparent />
-      <main>
-        <div className="relative pt-16 pb-32 flex content-center items-center justify-center min-h-screen-75">
+      <IndexNavbar fixed />
+      <section className="header relative pt-16 items-center flex h-screen max-h-860-px">
+        <div className="w-full mx-autp items-center flex-col justify-center md:flex-nowrap flex-wrap md:px-10 px-4">
+          {/* Form */}
+          <form className=" items-center ml-auto mb-3">
+            <div className="relative flex w-full flex-wrap items-stretch">
+              <span className="z-10 h-full leading-snug font-normal absolute text-center text-blueGray-300 bg-transparent rounded text-base items-center justify-center w-8 pl-3 py-3">
+                <i className="fas fa-search"></i>
+              </span>
+              <input
+                type="text"
+                placeholder="Search here..."
+                className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 relative bg-white rounded text-sm shadow outline-none focus:outline-none focus:ring w-full pl-10"
+              />
+            </div>
+          </form>
           <div
-            className="absolute top-0 w-full h-full bg-center bg-cover"
-            style={{
-              backgroundImage:
-                "url('https://images.unsplash.com/photo-1557804506-669a67965ba0?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1267&q=80')",
-            }}
+            className={
+              "relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded " +
+              (color === "light" ? "bg-white" : "bg-lightBlue-900 text-white")
+            }
           >
-            <span
-              id="blackOverlay"
-              className="w-full h-full absolute opacity-75 bg-black"
-            ></span>
-          </div>
-          <div className="container relative mx-auto">
-            <div className="items-center flex flex-wrap">
-              <div className="w-full lg:w-6/12 px-4 ml-auto mr-auto text-center">
-                <div className="pr-12">
-                  <h1 className="text-white font-semibold text-5xl">
-                    유저 검색
-                  </h1>
-                  <p className="mt-4 text-lg text-blueGray-200">
-                    MBTI를 검사할 유저를 검색해주세요.
-                  </p>
-                  <div class="relative flex w-full flex-wrap items-stretch mb-3 mt-3">
-                    <input
-                      type="text"
-                      placeholder="Large Input"
-                      class="px-3 py-4 placeholder-blueGray-300 text-blueGray-600 relative bg-white rounded text-base shadow outline-none focus:outline-none focus:shadow-outline w-full pr-10"
-                    />
-                    <span class="z-10 h-full leading-snug font-normal text-center text-blueGray-300 absolute bg-transparent rounded text-lg items-center justify-center w-8 right-0 pr-3 py-4">
-                      <i class="fas fa-user"></i>
-                    </span>
-                  </div>
+            <div className="rounded-t mb-0 px-4 py-3 border-0">
+              <div className="flex flex-wrap items-center">
+                <div className="relative w-full px-4 max-w-full flex-grow flex-1">
+                  <h3
+                    className={
+                      "font-semibold text-lg " +
+                      (color === "light" ? "text-blueGray-700" : "text-white")
+                    }
+                  >
+                    Users
+                  </h3>
                 </div>
               </div>
             </div>
-          </div>
-
-          <div
-            className="top-auto bottom-0 left-0 right-0 w-full absolute pointer-events-none overflow-hidden h-70-px"
-            style={{ transform: "translateZ(0)" }}
-          >
-            <svg
-              className="absolute bottom-0 overflow-hidden"
-              xmlns="http://www.w3.org/2000/svg"
-              preserveAspectRatio="none"
-              version="1.1"
-              viewBox="0 0 2560 100"
-              x="0"
-              y="0"
-            >
-              <polygon
-                className="text-blueGray-200 fill-current"
-                points="2560 0 2560 100 0 100"
-              ></polygon>
-            </svg>
+            <div className="block w-full overflow-x-auto">
+              {/* Projects table */}
+              <table className="items-center w-full bg-transparent border-collapse">
+                <thead>
+                  <tr>
+                    <th
+                      className={
+                        "px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left " +
+                        (color === "light"
+                          ? "bg-blueGray-50 text-blueGray-500 border-blueGray-100"
+                          : "bg-lightBlue-800 text-lightBlue-300 border-lightBlue-700")
+                      }
+                    >
+                      Name
+                    </th>
+                    <th
+                      className={
+                        "px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left " +
+                        (color === "light"
+                          ? "bg-blueGray-50 text-blueGray-500 border-blueGray-100"
+                          : "bg-lightBlue-800 text-lightBlue-300 border-lightBlue-700")
+                      }
+                    >
+                      age
+                    </th>
+                    <th
+                      className={
+                        "px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left " +
+                        (color === "light"
+                          ? "bg-blueGray-50 text-blueGray-500 border-blueGray-100"
+                          : "bg-lightBlue-800 text-lightBlue-300 border-lightBlue-700")
+                      }
+                    >
+                      locate
+                    </th>
+                    <th
+                      className={
+                        "px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left " +
+                        (color === "light"
+                          ? "bg-blueGray-50 text-blueGray-500 border-blueGray-100"
+                          : "bg-lightBlue-800 text-lightBlue-300 border-lightBlue-700")
+                      }
+                    >
+                      Users
+                    </th>
+                    <th
+                      className={
+                        "px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left " +
+                        (color === "light"
+                          ? "bg-blueGray-50 text-blueGray-500 border-blueGray-100"
+                          : "bg-lightBlue-800 text-lightBlue-300 border-lightBlue-700")
+                      }
+                    >
+                      Completion
+                    </th>
+                    <th
+                      className={
+                        "px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left " +
+                        (color === "light"
+                          ? "bg-blueGray-50 text-blueGray-500 border-blueGray-100"
+                          : "bg-lightBlue-800 text-lightBlue-300 border-lightBlue-700")
+                      }
+                    ></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left flex items-center">
+                      <img
+                        src={require("assets/img/bootstrap.jpg").default}
+                        className="h-12 w-12 bg-white rounded-full border"
+                        alt="..."
+                      ></img>{" "}
+                      <span
+                        className={
+                          "ml-3 font-bold " +
+                          +(color === "light"
+                            ? "text-blueGray-600"
+                            : "text-white")
+                        }
+                      >
+                        Argon Design System
+                      </span>
+                    </th>
+                    <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                      $2,500 USD
+                    </td>
+                    <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                      <i className="fas fa-circle text-orange-500 mr-2"></i>{" "}
+                      pending
+                    </td>
+                    <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                      <div className="flex">
+                        <img
+                          src={require("assets/img/team-1-800x800.jpg").default}
+                          alt="..."
+                          className="w-10 h-10 rounded-full border-2 border-blueGray-50 shadow"
+                        ></img>
+                        <img
+                          src={require("assets/img/team-2-800x800.jpg").default}
+                          alt="..."
+                          className="w-10 h-10 rounded-full border-2 border-blueGray-50 shadow -ml-4"
+                        ></img>
+                        <img
+                          src={require("assets/img/team-3-800x800.jpg").default}
+                          alt="..."
+                          className="w-10 h-10 rounded-full border-2 border-blueGray-50 shadow -ml-4"
+                        ></img>
+                        <img
+                          src={require("assets/img/team-4-470x470.png").default}
+                          alt="..."
+                          className="w-10 h-10 rounded-full border-2 border-blueGray-50 shadow -ml-4"
+                        ></img>
+                      </div>
+                    </td>
+                    <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                      <div className="flex items-center">
+                        <span className="mr-2">60%</span>
+                        <div className="relative w-full">
+                          <div className="overflow-hidden h-2 text-xs flex rounded bg-red-200">
+                            <div
+                              style={{ width: "60%" }}
+                              className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-red-500"
+                            ></div>
+                          </div>
+                        </div>
+                      </div>
+                    </td>
+                    <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-right">
+                      <TableDropdown />
+                    </td>
+                  </tr>
+                  <tr>
+                    <th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left flex items-center">
+                      <img
+                        src={require("assets/img/angular.jpg").default}
+                        className="h-12 w-12 bg-white rounded-full border"
+                        alt="..."
+                      ></img>{" "}
+                      <span
+                        className={
+                          "ml-3 font-bold " +
+                          +(color === "light"
+                            ? "text-blueGray-600"
+                            : "text-white")
+                        }
+                      >
+                        Angular Now UI Kit PRO
+                      </span>
+                    </th>
+                    <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                      $1,800 USD
+                    </td>
+                    <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                      <i className="fas fa-circle text-emerald-500 mr-2"></i>{" "}
+                      completed
+                    </td>
+                    <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                      <div className="flex">
+                        <img
+                          src={require("assets/img/team-1-800x800.jpg").default}
+                          alt="..."
+                          className="w-10 h-10 rounded-full border-2 border-blueGray-50 shadow"
+                        ></img>
+                        <img
+                          src={require("assets/img/team-2-800x800.jpg").default}
+                          alt="..."
+                          className="w-10 h-10 rounded-full border-2 border-blueGray-50 shadow -ml-4"
+                        ></img>
+                        <img
+                          src={require("assets/img/team-3-800x800.jpg").default}
+                          alt="..."
+                          className="w-10 h-10 rounded-full border-2 border-blueGray-50 shadow -ml-4"
+                        ></img>
+                        <img
+                          src={require("assets/img/team-4-470x470.png").default}
+                          alt="..."
+                          className="w-10 h-10 rounded-full border-2 border-blueGray-50 shadow -ml-4"
+                        ></img>
+                      </div>
+                    </td>
+                    <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                      <div className="flex items-center">
+                        <span className="mr-2">100%</span>
+                        <div className="relative w-full">
+                          <div className="overflow-hidden h-2 text-xs flex rounded bg-emerald-200">
+                            <div
+                              style={{ width: "100%" }}
+                              className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-emerald-500"
+                            ></div>
+                          </div>
+                        </div>
+                      </div>
+                    </td>
+                    <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-right">
+                      <TableDropdown />
+                    </td>
+                  </tr>
+                  <tr>
+                    <th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left flex items-center">
+                      <img
+                        src={require("assets/img/sketch.jpg").default}
+                        className="h-12 w-12 bg-white rounded-full border"
+                        alt="..."
+                      ></img>{" "}
+                      <span
+                        className={
+                          "ml-3 font-bold " +
+                          +(color === "light"
+                            ? "text-blueGray-600"
+                            : "text-white")
+                        }
+                      >
+                        Black Dashboard Sketch
+                      </span>
+                    </th>
+                    <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                      $3,150 USD
+                    </td>
+                    <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                      <i className="fas fa-circle text-red-500 mr-2"></i>{" "}
+                      delayed
+                    </td>
+                    <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                      <div className="flex">
+                        <img
+                          src={require("assets/img/team-1-800x800.jpg").default}
+                          alt="..."
+                          className="w-10 h-10 rounded-full border-2 border-blueGray-50 shadow"
+                        ></img>
+                        <img
+                          src={require("assets/img/team-2-800x800.jpg").default}
+                          alt="..."
+                          className="w-10 h-10 rounded-full border-2 border-blueGray-50 shadow -ml-4"
+                        ></img>
+                        <img
+                          src={require("assets/img/team-3-800x800.jpg").default}
+                          alt="..."
+                          className="w-10 h-10 rounded-full border-2 border-blueGray-50 shadow -ml-4"
+                        ></img>
+                        <img
+                          src={require("assets/img/team-4-470x470.png").default}
+                          alt="..."
+                          className="w-10 h-10 rounded-full border-2 border-blueGray-50 shadow -ml-4"
+                        ></img>
+                      </div>
+                    </td>
+                    <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                      <div className="flex items-center">
+                        <span className="mr-2">73%</span>
+                        <div className="relative w-full">
+                          <div className="overflow-hidden h-2 text-xs flex rounded bg-red-200">
+                            <div
+                              style={{ width: "73%" }}
+                              className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-red-500"
+                            ></div>
+                          </div>
+                        </div>
+                      </div>
+                    </td>
+                    <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-right">
+                      <TableDropdown />
+                    </td>
+                  </tr>
+                  <tr>
+                    <th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left flex items-center">
+                      <img
+                        src={require("assets/img/react.jpg").default}
+                        className="h-12 w-12 bg-white rounded-full border"
+                        alt="..."
+                      ></img>{" "}
+                      <span
+                        className={
+                          "ml-3 font-bold " +
+                          +(color === "light"
+                            ? "text-blueGray-600"
+                            : "text-white")
+                        }
+                      >
+                        React Material Dashboard
+                      </span>
+                    </th>
+                    <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                      $4,400 USD
+                    </td>
+                    <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                      <i className="fas fa-circle text-teal-500 mr-2"></i> on
+                      schedule
+                    </td>
+                    <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                      <div className="flex">
+                        <img
+                          src={require("assets/img/team-1-800x800.jpg").default}
+                          alt="..."
+                          className="w-10 h-10 rounded-full border-2 border-blueGray-50 shadow"
+                        ></img>
+                        <img
+                          src={require("assets/img/team-2-800x800.jpg").default}
+                          alt="..."
+                          className="w-10 h-10 rounded-full border-2 border-blueGray-50 shadow -ml-4"
+                        ></img>
+                        <img
+                          src={require("assets/img/team-3-800x800.jpg").default}
+                          alt="..."
+                          className="w-10 h-10 rounded-full border-2 border-blueGray-50 shadow -ml-4"
+                        ></img>
+                        <img
+                          src={require("assets/img/team-4-470x470.png").default}
+                          alt="..."
+                          className="w-10 h-10 rounded-full border-2 border-blueGray-50 shadow -ml-4"
+                        ></img>
+                      </div>
+                    </td>
+                    <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                      <div className="flex items-center">
+                        <span className="mr-2">90%</span>
+                        <div className="relative w-full">
+                          <div className="overflow-hidden h-2 text-xs flex rounded bg-teal-200">
+                            <div
+                              style={{ width: "90%" }}
+                              className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-teal-500"
+                            ></div>
+                          </div>
+                        </div>
+                      </div>
+                    </td>
+                    <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-right">
+                      <TableDropdown />
+                    </td>
+                  </tr>
+                  <tr>
+                    <th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left flex items-center">
+                      <img
+                        src={require("assets/img/vue.jpg").default}
+                        className="h-12 w-12 bg-white rounded-full border"
+                        alt="..."
+                      ></img>{" "}
+                      <span
+                        className={
+                          "ml-3 font-bold " +
+                          +(color === "light"
+                            ? "text-blueGray-600"
+                            : "text-white")
+                        }
+                      >
+                        React Material Dashboard
+                      </span>
+                    </th>
+                    <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                      $2,200 USD
+                    </td>
+                    <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                      <i className="fas fa-circle text-emerald-500 mr-2"></i>{" "}
+                      completed
+                    </td>
+                    <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                      <div className="flex">
+                        <img
+                          src={require("assets/img/team-1-800x800.jpg").default}
+                          alt="..."
+                          className="w-10 h-10 rounded-full border-2 border-blueGray-50 shadow"
+                        ></img>
+                        <img
+                          src={require("assets/img/team-2-800x800.jpg").default}
+                          alt="..."
+                          className="w-10 h-10 rounded-full border-2 border-blueGray-50 shadow -ml-4"
+                        ></img>
+                        <img
+                          src={require("assets/img/team-3-800x800.jpg").default}
+                          alt="..."
+                          className="w-10 h-10 rounded-full border-2 border-blueGray-50 shadow -ml-4"
+                        ></img>
+                        <img
+                          src={require("assets/img/team-4-470x470.png").default}
+                          alt="..."
+                          className="w-10 h-10 rounded-full border-2 border-blueGray-50 shadow -ml-4"
+                        ></img>
+                      </div>
+                    </td>
+                    <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                      <div className="flex items-center">
+                        <span className="mr-2">100%</span>
+                        <div className="relative w-full">
+                          <div className="overflow-hidden h-2 text-xs flex rounded bg-emerald-200">
+                            <div
+                              style={{ width: "100%" }}
+                              className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-emerald-500"
+                            ></div>
+                          </div>
+                        </div>
+                      </div>
+                    </td>
+                    <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-right">
+                      <TableDropdown />
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
-
-        <section className="pb-20 bg-blueGray-200 -mt-24">
-          <div className="container mx-auto px-4">
-            <div className="flex flex-wrap">
-              <div className="lg:pt-12 pt-6 w-full md:w-4/12 px-4 text-center">
-                <div className="relative flex flex-col min-w-0 break-words bg-white w-full mb-8 shadow-lg rounded-lg">
-                  <div className="px-4 py-5 flex-auto">
-                    <div className="text-white p-3 text-center inline-flex items-center justify-center w-12 h-12 mb-5 shadow-lg rounded-full bg-red-400">
-                      <i className="fas fa-award"></i>
-                    </div>
-                    <h6 className="text-xl font-semibold">주의 사항 1</h6>
-                    <p className="mt-2 mb-4 text-blueGray-500">
-                      가능하면 오래 생각하지 마십시오.
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="w-full md:w-4/12 px-4 text-center">
-                <div className="relative flex flex-col min-w-0 break-words bg-white w-full mb-8 shadow-lg rounded-lg">
-                  <div className="px-4 py-5 flex-auto">
-                    <div className="text-white p-3 text-center inline-flex items-center justify-center w-12 h-12 mb-5 shadow-lg rounded-full bg-lightBlue-400">
-                      <i className="fas fa-retweet"></i>
-                    </div>
-                    <h6 className="text-xl font-semibold">주의 사항 2</h6>
-                    <p className="mt-2 mb-4 text-blueGray-500">
-                      중립은 지양하는 것이 좋습니다.
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="pt-6 w-full md:w-4/12 px-4 text-center">
-                <div className="relative flex flex-col min-w-0 break-words bg-white w-full mb-8 shadow-lg rounded-lg">
-                  <div className="px-4 py-5 flex-auto">
-                    <div className="text-white p-3 text-center inline-flex items-center justify-center w-12 h-12 mb-5 shadow-lg rounded-full bg-emerald-400">
-                      <i className="fas fa-fingerprint"></i>
-                    </div>
-                    <h6 className="text-xl font-semibold">주의 사항 3</h6>
-                    <p className="mt-2 mb-4 text-blueGray-500">
-                      최대한 솔직하게 답변해주십시오.
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="flex flex-wrap items-center mt-32">
-              <div className="w-full md:w-5/12 px-4 mr-auto ml-auto">
-                <div className="text-blueGray-500 p-3 text-center inline-flex items-center justify-center w-16 h-16 mb-6 shadow-lg rounded-full bg-white">
-                  <i className="fas fa-user-friends text-xl"></i>
-                </div>
-                <h3 className="text-3xl mb-2 font-semibold leading-normal">
-                  Working with us is a pleasure
-                </h3>
-                <p className="text-lg font-light leading-relaxed mt-4 mb-4 text-blueGray-600">
-                  Don't let your uses guess by attaching tooltips and popoves to
-                  any element. Just make sure you enable them first via
-                  JavaScript.
-                </p>
-                <p className="text-lg font-light leading-relaxed mt-0 mb-4 text-blueGray-600">
-                  The kit comes with three pre-built pages to help you get
-                  started faster. You can change the text and images and you're
-                  good to go. Just make sure you enable them first via
-                  JavaScript.
-                </p>
-                <Link to="/" className="font-bold text-blueGray-700 mt-8">
-                  Check Notus React!
-                </Link>
-              </div>
-
-              <div className="w-full md:w-4/12 px-4 mr-auto ml-auto">
-                <div className="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-lg rounded-lg bg-lightBlue-500">
-                  <img
-                    alt="..."
-                    src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1051&q=80"
-                    className="w-full align-middle rounded-t-lg"
-                  />
-                  <blockquote className="relative p-8 mb-4">
-                    <svg
-                      preserveAspectRatio="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 583 95"
-                      className="absolute left-0 w-full block h-95-px -top-94-px"
-                    >
-                      <polygon
-                        points="-30,95 583,95 583,65"
-                        className="text-lightBlue-500 fill-current"
-                      ></polygon>
-                    </svg>
-                    <h4 className="text-xl font-bold text-white">
-                      Top Notch Services
-                    </h4>
-                    <p className="text-md font-light mt-2 text-white">
-                      The Arctic Ocean freezes every winter and much of the
-                      sea-ice then thaws every summer, and that process will
-                      continue whatever happens.
-                    </p>
-                  </blockquote>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-      </main>
+      </section>
       <Footer />
     </>
   );
 }
+
+Search.defaultProps = {
+  color: "light",
+};
+
+Search.propTypes = {
+  color: PropTypes.oneOf(["light", "dark"]),
+};
