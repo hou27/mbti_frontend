@@ -16,21 +16,25 @@ import Landing from "views/Landing.js";
 import Profile from "views/Profile.js";
 import Index from "views/Index.js";
 import Search from "views/search";
+import { ApolloProvider } from "@apollo/client";
+import { client } from "apollo";
 
 ReactDOM.render(
   <BrowserRouter>
-    <Switch>
-      {/* add routes with layouts */}
-      <Route path="/admin" component={Admin} />
-      <Route path="/auth" component={Auth} />
-      {/* add routes without layouts */}
-      <Route path="/search" exact component={Search} />
-      <Route path="/research" exact component={Landing} />
-      <Route path="/profile" exact component={Profile} />
-      <Route path="/" exact component={Index} />
-      {/* add redirect for first page */}
-      <Redirect from="*" to="/" />
-    </Switch>
+    <ApolloProvider client={client}>
+      <Switch>
+        {/* add routes with layouts */}
+        <Route path="/admin" component={Admin} />
+        <Route path="/auth" component={Auth} />
+        {/* add routes without layouts */}
+        <Route path="/search" exact component={Search} />
+        <Route path="/research" exact component={Landing} />
+        <Route path="/profile" exact component={Profile} />
+        <Route path="/" exact component={Index} />
+        {/* add redirect for first page */}
+        <Redirect from="*" to="/" />
+      </Switch>
+    </ApolloProvider>
   </BrowserRouter>,
   document.getElementById("root")
 );
