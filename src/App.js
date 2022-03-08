@@ -19,7 +19,7 @@ import { gql, useQuery, useReactiveVar } from "@apollo/client";
 import { loggedInFlag } from "./apollo";
 
 const IS_LOGGED_IN = gql`
-  query test {
+  query checkLogin {
     isLoggedIn @client
   }
 `;

@@ -1,8 +1,9 @@
 import { gql, useMutation } from "@apollo/client";
 import React from "react";
 import { useForm } from "react-hook-form";
+import { useHistory } from "react-router-dom";
 import { Link } from "react-router-dom";
-import { loggedInFlag } from "../../apollo";
+import { jwtTokenVar, loggedInFlag } from "../../apollo";
 import { FormError } from "../../components/formError";
 import { LOCALSTORAGE_TOKEN } from "../../localToken";
 
@@ -10,8 +11,8 @@ const LOGIN_MUTATION = gql`
   mutation loginMutation($loginInput: LoginInput!) {
     login(input: $loginInput) {
       ok
-      token
       error
+      token
     }
   }
 `;
@@ -26,6 +27,7 @@ export default function Login() {
   } = useForm({
     mode: "onChange",
   });
+  const history = useHistory();
   // console.log(watch("email"));
   // console.log(errors);
   const onCompleted = (data) => {
@@ -34,14 +36,15 @@ export default function Login() {
     } = data;
     if (ok && token) {
       localStorage.setItem(LOCALSTORAGE_TOKEN, token);
-      // authTokenVar(token);
+      jwtTokenVar(token);
       loggedInFlag(true);
+      history.push("/");
     }
   };
   const [loginMutation, { data: loginMutationResult, loading }] = useMutation(
     LOGIN_MUTATION,
     {
-      onCompleted,
+      onCompleted, // callback
     }
   );
   const onSubmit = () => {
@@ -120,12 +123,8 @@ export default function Login() {
                       placeholder="Email"
                     />
                     {errors.email?.type === "pattern" && (
-                        <p>{errors.email?.type}</p>
-                      ) && (
-                        <FormError
-                          errorMessage={"Please enter a valid email"}
-                        />
-                      )}
+                      <FormError errorMessage={"Please enter a valid email"} />
+                    )}
                     {errors.email?.message && (
                       <FormError errorMessage={errors.email?.message} />
                     )}
@@ -169,7 +168,7 @@ export default function Login() {
                       className="bg-blueGray-800 text-white active:bg-blueGray-600 text-sm font-bold uppercase px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 w-full ease-linear transition-all duration-150"
                       type="submit"
                     >
-                      Sign In
+                      {loading ? "Loading~~~" : "Sign In"}
                     </button>
                     {loginMutationResult?.login.error && (
                       <FormError

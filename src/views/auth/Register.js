@@ -1,6 +1,79 @@
+import { gql, useMutation } from "@apollo/client";
 import React from "react";
+import { useForm } from "react-hook-form";
+import { useHistory } from "react-router-dom";
+import { FormError } from "../../components/formError";
+import * as Yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
+
+const CREATEACCOUNT_MUTATION = gql`
+  mutation createAccountMutation($createAccountInput: CreateAccountInput!) {
+    createAccount(input: $createAccountInput) {
+      ok
+      error
+    }
+  }
+`;
 
 export default function Register() {
+  const formSchema = Yup.object().shape({
+    name: Yup.string().required("Name is required"),
+    email: Yup.string()
+      .required("Email is required")
+      .matches(
+        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+        "Please enter a valid email"
+      ),
+    password: Yup.string()
+      .required("Password is mendatory")
+      .min(3, "Password must be at 3 char long"),
+    confirmPassword: Yup.string()
+      .required("Please type your password one more time.")
+      .oneOf([Yup.ref("password")], "Passwords does not match"),
+  });
+  const {
+    register,
+    getValues,
+    formState: { errors },
+    handleSubmit,
+  } = useForm({
+    mode: "onChange",
+    resolver: yupResolver(formSchema),
+  });
+  const history = useHistory();
+  console.log(errors);
+  const onCompleted = (data) => {
+    const {
+      createAccount: { ok },
+    } = data;
+    if (ok) {
+      alert("Log in now!");
+      history.push("/");
+    } else console.log(ok);
+  };
+  const [
+    createAccountMutation,
+    { data: createAccountMutationResult, loading },
+  ] = useMutation(CREATEACCOUNT_MUTATION, {
+    onCompleted,
+  });
+
+  const onSubmit = () => {
+    if (!loading) {
+      console.log(getValues());
+      const { name, email, password } = getValues();
+      createAccountMutation({
+        variables: {
+          createAccountInput: {
+            name,
+            email,
+            password,
+          },
+        },
+      });
+    }
+  };
+
   return (
     <>
       <div className="container mx-auto px-4 h-full">
@@ -43,7 +116,7 @@ export default function Register() {
                 <div className="text-blueGray-400 text-center mb-3 font-bold">
                   <small>Or sign up with credentials</small>
                 </div>
-                <form>
+                <form onSubmit={handleSubmit(onSubmit)}>
                   <div className="relative w-full mb-3">
                     <label
                       className="block uppercase text-blueGray-600 text-xs font-bold mb-2"
@@ -52,10 +125,14 @@ export default function Register() {
                       Name
                     </label>
                     <input
-                      type="email"
+                      {...register("name")}
+                      type="text"
                       className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
                       placeholder="Name"
                     />
+                    {errors.name?.message && (
+                      <FormError errorMessage={errors.name?.message} />
+                    )}
                   </div>
 
                   <div className="relative w-full mb-3">
@@ -66,10 +143,14 @@ export default function Register() {
                       Email
                     </label>
                     <input
+                      {...register("email")}
                       type="email"
                       className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
                       placeholder="Email"
                     />
+                    {errors.email?.message && (
+                      <FormError errorMessage={errors.email?.message} />
+                    )}
                   </div>
 
                   <div className="relative w-full mb-3">
@@ -79,11 +160,35 @@ export default function Register() {
                     >
                       Password
                     </label>
+                    {/**passwordRegex = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,25}$/ */}
                     <input
+                      {...register("password")}
                       type="password"
                       className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
                       placeholder="Password"
                     />
+                    {errors.password?.message && (
+                      <FormError errorMessage={errors.password?.message} />
+                    )}
+                  </div>
+                  <div className="relative w-full mb-3">
+                    <label
+                      className="block uppercase text-blueGray-600 text-xs font-bold mb-2"
+                      htmlFor="grid-password"
+                    >
+                      Check Password
+                    </label>
+                    <input
+                      {...register("confirmPassword")}
+                      type="password"
+                      className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
+                      placeholder="Check your Password"
+                    />
+                    {errors.confirmPassword?.message && (
+                      <FormError
+                        errorMessage={errors.confirmPassword?.message}
+                      />
+                    )}
                   </div>
 
                   <div>
@@ -109,10 +214,17 @@ export default function Register() {
                   <div className="text-center mt-6">
                     <button
                       className="bg-blueGray-800 text-white active:bg-blueGray-600 text-sm font-bold uppercase px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 w-full ease-linear transition-all duration-150"
-                      type="button"
+                      type="submit"
                     >
-                      Create Account
+                      {loading ? "Loading~~~" : "Create Account"}
                     </button>
+                    {createAccountMutationResult?.createAccount.error && (
+                      <FormError
+                        errorMessage={
+                          createAccountMutationResult.createAccount.error
+                        }
+                      />
+                    )}
                   </div>
                 </form>
               </div>
