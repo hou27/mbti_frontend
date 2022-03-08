@@ -1,7 +1,60 @@
+import { gql, useMutation } from "@apollo/client";
+import { loggedInFlag } from "apollo";
+import { FormError } from "components/formError";
+import { LOCALSTORAGE_TOKEN } from "localToken";
 import React from "react";
+import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 
+const LOGIN_MUTATION = gql`
+  mutation loginMutation($loginInput: LoginInput!) {
+    login(input: $loginInput) {
+      ok
+      token
+      error
+    }
+  }
+`;
+
 export default function Login() {
+  const {
+    register,
+    getValues,
+    formState: { errors },
+    handleSubmit,
+  } = useForm({
+    mode: "onChange",
+  });
+  const onCompleted = (data) => {
+    const {
+      login: { ok, token },
+    } = data;
+    if (ok && token) {
+      localStorage.setItem(LOCALSTORAGE_TOKEN, token);
+      // authTokenVar(token);
+      loggedInFlag(true);
+    }
+  };
+  const [loginMutation, { data: loginMutationResult, loading }] = useMutation(
+    LOGIN_MUTATION,
+    {
+      onCompleted,
+    }
+  );
+  const onSubmit = () => {
+    if (!loading) {
+      const { email, password } = getValues();
+      loginMutation({
+        variables: {
+          loginInput: {
+            email,
+            password,
+          },
+        },
+      });
+    }
+  };
+
   return (
     <>
       <div className="container mx-auto px-4 h-full">
@@ -16,7 +69,7 @@ export default function Login() {
                 </div>
                 <div className="btn-wrapper text-center">
                   <button
-                    className="bg-white active:bg-blueGray-50 text-blueGray-700 font-normal px-4 py-2 rounded outline-none focus:outline-none mr-2 mb-1 uppercase shadow hover:shadow-md inline-flex items-center font-bold text-xs ease-linear transition-all duration-150"
+                    className="bg-white active:bg-blueGray-50 text-blueGray-700 font-normal px-4 py-2 rounded outline-none focus:outline-none mr-2 mb-1 shadow hover:shadow-md inline-flex items-center font-bold text-xs ease-linear transition-all duration-150"
                     type="button"
                   >
                     <img
@@ -24,10 +77,10 @@ export default function Login() {
                       className="w-5 mr-1"
                       src={require("assets/img/github.svg").default}
                     />
-                    Github
+                    Kakao
                   </button>
                   <button
-                    className="bg-white active:bg-blueGray-50 text-blueGray-700 font-normal px-4 py-2 rounded outline-none focus:outline-none mr-1 mb-1 uppercase shadow hover:shadow-md inline-flex items-center font-bold text-xs ease-linear transition-all duration-150"
+                    className="bg-white active:bg-blueGray-50 text-blueGray-700 font-normal px-4 py-2 rounded outline-none focus:outline-none mr-1 mb-1 shadow hover:shadow-md inline-flex items-center font-bold text-xs ease-linear transition-all duration-150"
                     type="button"
                   >
                     <img
@@ -44,7 +97,7 @@ export default function Login() {
                 <div className="text-blueGray-400 text-center mb-3 font-bold">
                   <small>Or sign in with credentials</small>
                 </div>
-                <form>
+                <form onSubmit={handleSubmit(onSubmit)}>
                   <div className="relative w-full mb-3">
                     <label
                       className="block uppercase text-blueGray-600 text-xs font-bold mb-2"
@@ -53,10 +106,22 @@ export default function Login() {
                       Email
                     </label>
                     <input
+                      {...register("email", {
+                        required: "Email is required",
+                        pattern:
+                          /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+                      })}
+                      required
                       type="email"
                       className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
                       placeholder="Email"
                     />
+                    {errors.email?.type === "pattern" && (
+                      <FormError errorMessage={"Please enter a valid email"} />
+                    )}
+                    {errors.email?.message && (
+                      <FormError errorMessage={errors.email?.message} />
+                    )}
                   </div>
 
                   <div className="relative w-full mb-3">
@@ -67,10 +132,17 @@ export default function Login() {
                       Password
                     </label>
                     <input
+                      {...register("password", {
+                        required: "Password is required",
+                      })}
+                      required
                       type="password"
                       className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
                       placeholder="Password"
                     />
+                    {errors.password?.message && (
+                      <FormError errorMessage={errors.password?.message} />
+                    )}
                   </div>
                   <div>
                     <label className="inline-flex items-center cursor-pointer">
@@ -88,10 +160,15 @@ export default function Login() {
                   <div className="text-center mt-6">
                     <button
                       className="bg-blueGray-800 text-white active:bg-blueGray-600 text-sm font-bold uppercase px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 w-full ease-linear transition-all duration-150"
-                      type="button"
+                      type="submit"
                     >
                       Sign In
                     </button>
+                    {loginMutationResult?.login.error && (
+                      <FormError
+                        errorMessage={loginMutationResult.login.error}
+                      />
+                    )}
                   </div>
                 </form>
               </div>
