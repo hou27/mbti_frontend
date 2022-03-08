@@ -18,14 +18,15 @@ import Search from "./views/search";
 import { gql, useQuery, useReactiveVar } from "@apollo/client";
 import { loggedInFlag } from "./apollo";
 
-const IS_LOGGED_IN = gql`
-  query checkLogin {
-    isLoggedIn @client
-  }
-`;
+// const IS_LOGGED_IN = gql`
+//   query checkLogin {
+//     isLoggedIn @client
+//   }
+// `;
 
 export default function App() {
   const isLoggedIn = useReactiveVar(loggedInFlag);
+  console.log(isLoggedIn);
   return (
     <BrowserRouter>
       <Switch>

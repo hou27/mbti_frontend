@@ -34,13 +34,12 @@ export default function Index() {
               <p className="mt-4 text-lg leading-relaxed text-blueGray-500">
                 MBTI others is Free and Open Source.{" "}
                 <a
-                  href="https://tailwindcss.com/?ref=creativetim"
-                  className="text-blueGray-600"
+                  href="https://github.com/hou27"
+                  className="font-bold text-blue-600"
                   target="_blank"
                 >
-                  Share
+                  I'm waiting for frontend developer.
                 </a>
-                . It makes you popluar.
                 <br /> Let's get started!
               </p>
               <div className="mt-12">

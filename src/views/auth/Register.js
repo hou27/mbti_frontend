@@ -41,7 +41,6 @@ export default function Register() {
     resolver: yupResolver(formSchema),
   });
   const history = useHistory();
-  console.log(errors);
   const onCompleted = (data) => {
     const {
       createAccount: { ok },
@@ -60,7 +59,6 @@ export default function Register() {
 
   const onSubmit = () => {
     if (!loading) {
-      console.log(getValues());
       const { name, email, password } = getValues();
       createAccountMutation({
         variables: {

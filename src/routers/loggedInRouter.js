@@ -10,7 +10,7 @@ import Auth from "../layouts/Auth";
 
 import Landing from "../views/Landing";
 import Profile from "../views/Profile";
-import Index from "../views/Index";
+import Index from "../views/main";
 import Search from "../views/search";
 
 // import { gql } from "@apollo/client";

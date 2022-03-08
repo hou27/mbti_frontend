@@ -1,11 +1,11 @@
 import React from "react";
 import PropTypes from "prop-types";
-import IndexNavbar from "components/Navbars/IndexNavbar.js";
-import Footer from "components/Footers/Footer.js";
+import IndexNavbar from "../components/Navbars/IndexNavbar.js";
+import Footer from "../components/Footers/Footer.js";
 
 // components
 
-import TableDropdown from "components/Dropdowns/TableDropdown.js";
+import TableDropdown from "../components/Dropdowns/TableDropdown.js";
 
 export default function Search({ color }) {
   return (
