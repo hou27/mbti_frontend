@@ -1,6 +1,8 @@
 /*eslint-disable*/
 import React from "react";
 import { Link } from "react-router-dom";
+import { loggedInFlag } from "../../apollo.js";
+import { LOCALSTORAGE_TOKEN } from "../../localToken.js";
 // components
 
 import IndexDropdown from "../Dropdowns/IndexDropdown.js";
@@ -59,17 +61,31 @@ export default function Navbar(props) {
                   <span className="lg:hidden inline-block ml-2">github</span>
                 </a>
               </li>
-
-              <li className="flex items-center">
-                <Link to="/auth/login">
+              {loggedInFlag() ? (
+                <li className="flex items-center">
                   <button
+                    onClick={() => {
+                      localStorage.removeItem(LOCALSTORAGE_TOKEN);
+                      loggedInFlag(false);
+                    }}
                     className="bg-lightBlue-500 text-white active:bg-lightBlue-600 text-xs font-bold uppercase px-4 py-2 rounded shadow hover:shadow-lg outline-none focus:outline-none lg:mr-1 lg:mb-0 ml-3 mb-3 ease-linear transition-all duration-150"
                     type="button"
                   >
-                    <i className="fas fa-arrow-alt-circle-down"></i> Login
+                    <i className="fas fa-arrow-alt-circle-down"></i> Logout
                   </button>
-                </Link>
-              </li>
+                </li>
+              ) : (
+                <li className="flex items-center">
+                  <Link to="/auth/login">
+                    <button
+                      className="bg-lightBlue-500 text-white active:bg-lightBlue-600 text-xs font-bold uppercase px-4 py-2 rounded shadow hover:shadow-lg outline-none focus:outline-none lg:mr-1 lg:mb-0 ml-3 mb-3 ease-linear transition-all duration-150"
+                      type="button"
+                    >
+                      <i className="fas fa-arrow-alt-circle-down"></i> Login
+                    </button>
+                  </Link>
+                </li>
+              )}
             </ul>
           </div>
         </div>

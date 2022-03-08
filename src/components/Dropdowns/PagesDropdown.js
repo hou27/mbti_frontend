@@ -2,10 +2,10 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { createPopper } from "@popperjs/core";
 import { useMe } from "../../hooks/useMe";
+import { loggedInFlag } from "../../apollo";
 
 const PagesDropdown = () => {
   const { data, loading, error } = useMe();
-  console.log("result of mequery ::: ", data);
 
   // dropdown props
   const [dropdownPopoverShow, setDropdownPopoverShow] = React.useState(false);
@@ -31,7 +31,7 @@ const PagesDropdown = () => {
           dropdownPopoverShow ? closeDropdownPopover() : openDropdownPopover();
         }}
       >
-        {data?.me.name ? data.me.name : "My Pages"}
+        {loggedInFlag() ? (loading ? "Loading.." : data?.me.name) : "My Pages"}
       </a>
       <div
         ref={popoverDropdownRef}

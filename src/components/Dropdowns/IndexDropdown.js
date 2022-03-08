@@ -1,8 +1,12 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { createPopper } from "@popperjs/core";
+import { useMe } from "../../hooks/useMe";
+import { loggedInFlag } from "../../apollo";
 
 const IndexDropdown = () => {
+  const { data, loading, error } = useMe();
+
   // dropdown props
   const [dropdownPopoverShow, setDropdownPopoverShow] = React.useState(false);
   const btnDropdownRef = React.createRef();
@@ -27,7 +31,7 @@ const IndexDropdown = () => {
           dropdownPopoverShow ? closeDropdownPopover() : openDropdownPopover();
         }}
       >
-        My Pages
+        {loggedInFlag() ? (loading ? "Loading.." : data?.me.name) : "My Pages"}
       </a>
       <div
         ref={popoverDropdownRef}
