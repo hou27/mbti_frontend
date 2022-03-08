@@ -13,7 +13,7 @@ import Auth from "./layouts/Auth";
 
 import Landing from "./views/Landing";
 import Profile from "./views/Profile";
-import Index from "./views/Index";
+import Index from "./views/main";
 import Search from "./views/search";
 import { gql, useQuery, useReactiveVar } from "@apollo/client";
 import { loggedInFlag } from "./apollo";
@@ -23,7 +23,6 @@ import { loggedInFlag } from "./apollo";
 //     isLoggedIn @client
 //   }
 // `;
-
 export default function App() {
   const isLoggedIn = useReactiveVar(loggedInFlag);
   console.log(isLoggedIn);
