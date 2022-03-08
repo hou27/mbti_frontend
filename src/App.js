@@ -6,16 +6,17 @@ import "assets/styles/tailwind.css";
 
 // layouts
 
-import Admin from "layouts/Admin";
-import Auth from "layouts/Auth";
+import Admin from "./layouts/Admin";
+import Auth from "./layouts/Auth";
 
 // views without layouts
 
-import Landing from "views/Landing";
-import Profile from "views/Profile";
-import Index from "views/Index";
-import Search from "views/search";
-import { gql, useQuery } from "@apollo/client";
+import Landing from "./views/Landing";
+import Profile from "./views/Profile";
+import Index from "./views/Index";
+import Search from "./views/search";
+import { gql, useQuery, useReactiveVar } from "@apollo/client";
+import { loggedInFlag } from "./apollo";
 
 const IS_LOGGED_IN = gql`
   query test {
@@ -24,8 +25,7 @@ const IS_LOGGED_IN = gql`
 `;
 
 export default function App() {
-  const { data } = useQuery(IS_LOGGED_IN);
-  console.log(data);
+  const isLoggedIn = useReactiveVar(loggedInFlag);
   return (
     <BrowserRouter>
       <Switch>

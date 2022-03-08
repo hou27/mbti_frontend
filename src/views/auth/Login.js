@@ -1,10 +1,10 @@
 import { gql, useMutation } from "@apollo/client";
-import { loggedInFlag } from "apollo";
-import { FormError } from "components/formError";
-import { LOCALSTORAGE_TOKEN } from "localToken";
 import React from "react";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
+import { loggedInFlag } from "../../apollo";
+import { FormError } from "../../components/formError";
+import { LOCALSTORAGE_TOKEN } from "../../localToken";
 
 const LOGIN_MUTATION = gql`
   mutation loginMutation($loginInput: LoginInput!) {
@@ -22,9 +22,12 @@ export default function Login() {
     getValues,
     formState: { errors },
     handleSubmit,
+    watch,
   } = useForm({
     mode: "onChange",
   });
+  // console.log(watch("email"));
+  // console.log(errors);
   const onCompleted = (data) => {
     const {
       login: { ok, token },
@@ -117,8 +120,12 @@ export default function Login() {
                       placeholder="Email"
                     />
                     {errors.email?.type === "pattern" && (
-                      <FormError errorMessage={"Please enter a valid email"} />
-                    )}
+                        <p>{errors.email?.type}</p>
+                      ) && (
+                        <FormError
+                          errorMessage={"Please enter a valid email"}
+                        />
+                      )}
                     {errors.email?.message && (
                       <FormError errorMessage={errors.email?.message} />
                     )}

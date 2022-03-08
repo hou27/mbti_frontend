@@ -5,8 +5,8 @@ import "@fortawesome/fontawesome-free/css/all.min.css";
 import "assets/styles/tailwind.css";
 
 import { ApolloProvider } from "@apollo/client";
-import { client } from "apollo";
-import App from "App";
+import { client } from "./apollo";
+import App from "./App";
 
 ReactDOM.render(
   <React.StrictMode>
