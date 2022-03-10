@@ -6,6 +6,9 @@ import { Link } from "react-router-dom";
 import { jwtTokenVar, loggedInFlag } from "../../apollo";
 import { FormError } from "../../components/formError";
 import { LOCALSTORAGE_TOKEN } from "../../localToken";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 const LOGIN_MUTATION = gql`
   mutation loginMutation($loginInput: LoginInput!) {
@@ -74,28 +77,18 @@ export default function Login() {
                   </h6>
                 </div>
                 <div className="btn-wrapper text-center">
-                  <button
-                    className="bg-white active:bg-blueGray-50 text-blueGray-700 font-normal px-4 py-2 rounded outline-none focus:outline-none mr-2 mb-1 shadow hover:shadow-md inline-flex items-center font-bold text-xs ease-linear transition-all duration-150"
-                    type="button"
+                  <a
+                    href={`https://kauth.kakao.com/oauth/authorize?client_id=${process.env.REACT_APP_KAKAO_REST_API_KEY}&redirect_uri=${process.env.REACT_APP_REDIRECT_URI}&response_type=code`}
+                    className="mr-2 mb-1 shadow hover:shadow-md inline-flex items-center font-bold text-xs ease-linear transition-all duration-150"
                   >
                     <img
                       alt="..."
-                      className="w-5 mr-1"
-                      src={require("assets/img/github.svg").default}
+                      src={
+                        require("assets/img/kakao_login_medium_narrow.png")
+                          .default
+                      }
                     />
-                    Kakao
-                  </button>
-                  <button
-                    className="bg-white active:bg-blueGray-50 text-blueGray-700 font-normal px-4 py-2 rounded outline-none focus:outline-none mr-1 mb-1 shadow hover:shadow-md inline-flex items-center font-bold text-xs ease-linear transition-all duration-150"
-                    type="button"
-                  >
-                    <img
-                      alt="..."
-                      className="w-5 mr-1"
-                      src={require("assets/img/google.svg").default}
-                    />
-                    Google
-                  </button>
+                  </a>
                 </div>
                 <hr className="mt-6 border-b-1 border-blueGray-300" />
               </div>
