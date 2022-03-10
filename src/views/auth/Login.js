@@ -6,9 +6,6 @@ import { Link } from "react-router-dom";
 import { jwtTokenVar, loggedInFlag } from "../../apollo";
 import { FormError } from "../../components/formError";
 import { LOCALSTORAGE_TOKEN } from "../../localToken";
-import dotenv from "dotenv";
-
-dotenv.config();
 
 const LOGIN_MUTATION = gql`
   mutation loginMutation($loginInput: LoginInput!) {
@@ -78,7 +75,7 @@ export default function Login() {
                 </div>
                 <div className="btn-wrapper text-center">
                   <a
-                    href={`https://kauth.kakao.com/oauth/authorize?client_id=${process.env.REACT_APP_KAKAO_REST_API_KEY}&redirect_uri=${process.env.REACT_APP_REDIRECT_URI}&response_type=code`}
+                    href={`https://kauth.kakao.com/oauth/authorize?client_id=${process.env.REACT_APP_KAKAO_REST_API_KEY}&redirect_uri=${process.env.REACT_APP_REDIRECT_URI_AUTH}&response_type=code`}
                     className="mr-2 mb-1 shadow hover:shadow-md inline-flex items-center font-bold text-xs ease-linear transition-all duration-150"
                   >
                     <img

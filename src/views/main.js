@@ -6,6 +6,7 @@ import IndexNavbar from "../components/Navbars/IndexNavbar";
 import Footer from "../components/Footers/Footer";
 
 import { useMe } from "../hooks/useMe";
+import KCallback from "./auth/Kakao";
 
 export default function Index() {
   // const { data, loading, error } = useMe();
