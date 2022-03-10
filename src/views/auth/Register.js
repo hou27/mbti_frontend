@@ -7,20 +7,8 @@ import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 
 const CREATEACCOUNT_MUTATION = gql`
-  mutation createAccountMutation(
-    $name: String!
-    $email: String!
-    $password: String!
-    $intGender: Number!
-  ) {
-    createAccount(
-      input: {
-        name: $name
-        email: $email
-        password: $password
-        gender: $intGender
-      }
-    ) {
+  mutation createAccountMutation($createAccountInput: CreateAccountInput!) {
+    createAccount(input: $createAccountInput) {
       ok
       error
     }
@@ -51,12 +39,10 @@ export default function Register() {
     getValues,
     formState: { errors },
     handleSubmit,
-    watch,
   } = useForm({
     mode: "onChange",
     resolver: yupResolver(formSchema),
   });
-  console.log(watch(), typeof watch("gender"));
   const history = useHistory();
   const onCompleted = (data) => {
     const {
@@ -78,13 +64,14 @@ export default function Register() {
     if (!loading) {
       const { name, email, password, gender } = getValues();
       const intGender = +gender;
-      console.log(intGender);
       createAccountMutation({
         variables: {
-          name,
-          email,
-          password,
-          gender: intGender,
+          createAccountInput: {
+            name,
+            email,
+            password,
+            gender: intGender,
+          },
         },
       });
     }
