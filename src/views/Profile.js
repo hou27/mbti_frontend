@@ -2,8 +2,12 @@ import React from "react";
 import { Link } from "react-router-dom";
 import Navbar from "../components/Navbars/AuthNavbar.js";
 import Footer from "../components/Footers/Footer.js";
+import { useMe } from "../hooks/useMe.js";
 
 export default function Profile() {
+  const { data, loading, error } = useMe();
+  // useMe가 아니라 id로 유저를 찾아서 그 값을 띄워야 함.
+
   return (
     <>
       <Navbar transparent />
@@ -50,7 +54,11 @@ export default function Profile() {
                     <div className="relative">
                       <img
                         alt="..."
-                        src={require("assets/img/team-2-800x800.jpg").default}
+                        src={
+                          data?.me?.profileImg
+                            ? data.me.profileImg
+                            : require("assets/img/user.png").default
+                        }
                         className="shadow-xl rounded-full h-auto align-middle border-none absolute -m-16 -ml-20 lg:-ml-16 max-w-150-px"
                       />
                     </div>
@@ -98,30 +106,36 @@ export default function Profile() {
                 </div>
                 <div className="text-center mt-12">
                   <h3 className="text-4xl font-semibold leading-normal text-blueGray-700 mb-2">
-                    Jenna Stones
+                    {data?.me?.name ? data.me?.name : "No Info"}
                   </h3>
                   <div className="text-sm leading-normal mt-0 mb-2 text-blueGray-400 font-bold uppercase">
                     <i className="fas fa-map-marker-alt mr-2 text-lg text-blueGray-400"></i>{" "}
-                    Los Angeles, California
+                    {data?.me?.birth ? data.me?.birth : "enter your birth"}
                   </div>
                   <div className="mb-2 text-blueGray-600 mt-10">
                     <i className="fas fa-briefcase mr-2 text-lg text-blueGray-400"></i>
-                    ENTJ
+                    {data?.me?.bio
+                      ? data.me?.bio
+                      : "You can enter anything here."}
                   </div>
                   <div className="mb-2 text-blueGray-600">
                     <i className="fas fa-university mr-2 text-lg text-blueGray-400"></i>
-                    University of Computer Science
+                    {data?.me?.email ? data.me.email : "No Info"}
                   </div>
                 </div>
                 <div className="mt-10 py-10 border-t border-blueGray-200 text-center">
                   <div className="flex flex-wrap justify-center">
                     <div className="w-full lg:w-9/12 px-4">
                       <p className="mb-4 text-lg leading-relaxed text-blueGray-700">
-                        An artist of considerable range, Jenna the name taken by
-                        Melbourne-raised, Brooklyn-based Nick Murphy writes,
-                        performs and records all of his own music, giving it a
-                        warm, intimate feel with a solid groove structure. An
-                        artist of considerable range.
+                        {data?.me?.bio ? (
+                          data.me?.bio
+                        ) : (
+                          <p>
+                            enter your bio
+                            <br />
+                            ex) Info like your MBTI or some links like your SNS.
+                          </p>
+                        )}
                       </p>
                       <a
                         href="#pablo"

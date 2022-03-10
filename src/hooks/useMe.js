@@ -5,7 +5,10 @@ export const ME_QUERY = gql`
     me {
       id
       name
+      profileImg
       email
+      gender
+      birth
     }
   }
 `;
