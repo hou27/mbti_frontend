@@ -7,8 +7,20 @@ import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 
 const CREATEACCOUNT_MUTATION = gql`
-  mutation createAccountMutation($createAccountInput: CreateAccountInput!) {
-    createAccount(input: $createAccountInput) {
+  mutation createAccountMutation(
+    $name: String!
+    $email: String!
+    $password: String!
+    $intGender: Number!
+  ) {
+    createAccount(
+      input: {
+        name: $name
+        email: $email
+        password: $password
+        gender: $intGender
+      }
+    ) {
       ok
       error
     }
@@ -30,16 +42,21 @@ export default function Register() {
     confirmPassword: Yup.string()
       .required("Please type your password one more time.")
       .oneOf([Yup.ref("password")], "Passwords does not match"),
+    gender: Yup.number()
+      .required("Selecting the gender field is required")
+      .oneOf([0, 1]),
   });
   const {
     register,
     getValues,
     formState: { errors },
     handleSubmit,
+    watch,
   } = useForm({
     mode: "onChange",
     resolver: yupResolver(formSchema),
   });
+  console.log(watch(), typeof watch("gender"));
   const history = useHistory();
   const onCompleted = (data) => {
     const {
@@ -59,14 +76,15 @@ export default function Register() {
 
   const onSubmit = () => {
     if (!loading) {
-      const { name, email, password } = getValues();
+      const { name, email, password, gender } = getValues();
+      const intGender = +gender;
+      console.log(intGender);
       createAccountMutation({
         variables: {
-          createAccountInput: {
-            name,
-            email,
-            password,
-          },
+          name,
+          email,
+          password,
+          gender: intGender,
         },
       });
     }
@@ -189,6 +207,38 @@ export default function Register() {
                     )}
                   </div>
 
+                  <div className="mb-8">
+                    <label className="inline-flex items-center cursor-pointer">
+                      <span className="text-sm font-semibold text-blueGray-600">
+                        <input
+                          {...register("gender")}
+                          type="radio"
+                          id="Male"
+                          name="gender"
+                          value="0"
+                          className="form-radio border-0 rounded text-blueGray-700 ml-1 mr-3 w-5 h-5 ease-linear transition-all duration-150"
+                          defaultChecked
+                        />
+                        <label htmlFor="Male" className="mr-3">
+                          Male
+                        </label>
+                        <input
+                          {...register("gender")}
+                          type="radio"
+                          id="Female"
+                          name="gender"
+                          value="1"
+                          className="form-radio border-0 rounded text-blueGray-700 ml-1 mr-3 w-5 h-5 ease-linear transition-all duration-150"
+                        />
+                        <label htmlFor="Female" className="mr-3">
+                          Female
+                        </label>
+                      </span>
+                      {errors.gender?.message && (
+                        <FormError errorMessage={errors.gender?.message} />
+                      )}
+                    </label>
+                  </div>
                   <div>
                     <label className="inline-flex items-center cursor-pointer">
                       <input
