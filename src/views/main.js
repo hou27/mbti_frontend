@@ -5,25 +5,7 @@ import { Link } from "react-router-dom";
 import IndexNavbar from "../components/Navbars/IndexNavbar";
 import Footer from "../components/Footers/Footer";
 
-import { useMe } from "../hooks/useMe";
-import KCallback from "./auth/Kakao";
-
 export default function Index() {
-  // const { data, loading, error } = useMe();
-
-  // console.log(data);
-  // if (loading)
-  //   return (
-  //     <div className="h-screen flex justify-center items-center">
-  //       <span className="font-medium text-xl tracking-wide">Loading...</span>
-  //     </div>
-  //   );
-  // if (error)
-  //   return (
-  //     <div className="h-screen flex justify-center items-center">
-  //       <span className="font-medium text-xl tracking-wide">Error...</span>
-  //     </div>
-  //   );
   return (
     <>
       <IndexNavbar fixed />

@@ -1,37 +1,30 @@
 // @ts-ignore
-import React from "react";
+import React, { useEffect } from "react";
 import { gql, useMutation } from "@apollo/client";
 import axios from "axios";
-import * as Yup from "yup";
 import qs from "qs";
 import queryString from "query-string";
 
 import { useHistory } from "react-router-dom";
 import { FormError } from "../../components/formError";
 import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-
-const CREATE_KAKAO_ACCOUNT_MUTATION = gql`
-  mutation createAccountMutation(
-    $createKakaoAccountInput: CreateKakaoAccountInput!
-  ) {
-    createKakaoAccount(input: $createKakaoAccountInput) {
-      ok
-      error
-    }
-  }
-`;
+import { useLogin } from "../../hooks/useLogin";
+import { LOCALSTORAGE_TOKEN } from "../../localToken";
+import { jwtTokenVar, loggedInFlag } from "../../apollo";
 
 const FIND_ACCOUNT_BY_EMAIL_MUTATION = gql`
-  mutation findAccountByEmailMutation($findMyEmailInput: FindMyEmailInput!) {
-    findByEmail(input: $findMyEmailInput) {
+  mutation findAccountByEmailMutation($findByEmailInput: FindByEmailInput!) {
+    findByEmail(input: $findByEmailInput) {
       ok
       error
+      user {
+        email
+      }
     }
   }
 `;
 
-export default function KakaoCallback({ location }) {
+export default function KakaoLogin({ location }) {
   // Init Kakao api
   // @ts-ignore
   if (!window.Kakao.isInitialized()) {
@@ -42,80 +35,38 @@ export default function KakaoCallback({ location }) {
   }
   const history = useHistory();
 
-  const onCompleted = (data, error) => {
-    const {
-      createKakaoAccount: { ok },
-    } = data;
-    if (ok) {
-      alert("Log in now!");
-      history.push("/");
-    } else if (error) {
-      console.log(error);
-    } else console.log(data);
-  };
-
-  // Declare mutation
-
-  const [
-    createKakaoAccountMutation,
-    { data: createKakaoAccountMutationResult, loading, error },
-  ] = useMutation(CREATE_KAKAO_ACCOUNT_MUTATION, {
-    onCompleted,
-  });
-
-  // const [
-  //   findAccountByEmailMutation,
-  //   { data: findAccountByEmailMutationResult, loading: loadAccount },
-  // ] = useMutation(FIND_ACCOUNT_BY_EMAIL_MUTATION, {
-  //   onCompleted,
-  // });
-
-  const formSchema = Yup.object().shape({
-    password: Yup.string()
-      .required("Password is mendatory")
-      .min(3, "Password must be at 3 char long"),
-    confirmPassword: Yup.string()
-      .required("Please type your password one more time.")
-      .oneOf([Yup.ref("password")], "Passwords does not match"),
-  });
-
   const {
     register,
     getValues,
     formState: { errors },
     handleSubmit,
+    watch,
   } = useForm({
     mode: "onChange",
-    resolver: yupResolver(formSchema),
   });
+  watch("email");
 
-  /** create kakao account */
-
-  function createKakaoAccount(
-    name,
-    profileImg,
-    email,
-    gender,
-    password,
-    birth
-  ) {
-    if (!loading) {
-      let intGender;
-      gender === "male" ? (intGender = 0) : (intGender = 1);
-      createKakaoAccountMutation({
-        variables: {
-          createKakaoAccountInput: {
-            name,
-            profileImg,
-            email,
-            gender: intGender,
-            password,
-            birth,
-          },
-        },
-      });
+  const onCompleted = (data) => {
+    const {
+      login: { ok, token },
+    } = data;
+    if (ok && token) {
+      localStorage.setItem(LOCALSTORAGE_TOKEN, token);
+      jwtTokenVar(token);
+      loggedInFlag(true);
+      history.push("/");
     }
-  }
+  };
+
+  // Declare mutation
+
+  const [
+    findByEmailMutation,
+    { data: findByEmailMutationResult, loading: accountLoading },
+  ] = useMutation(FIND_ACCOUNT_BY_EMAIL_MUTATION, {});
+
+  const [loginMutation, { data: loginMutationResult, loading }] =
+    useLogin(onCompleted);
 
   /** get user info */
 
@@ -126,7 +77,7 @@ export default function KakaoCallback({ location }) {
     const formData = {
       grant_type: "authorization_code",
       client_id: process.env.REACT_APP_KAKAO_REST_API_KEY,
-      redirect_uri: process.env.REACT_APP_REDIRECT_URI_AUTH,
+      redirect_uri: process.env.REACT_APP_REDIRECT_URI_LOGIN,
       code,
       client_secret: process.env.REACT_APP_CLIENT_SECRET,
     };
@@ -140,7 +91,17 @@ export default function KakaoCallback({ location }) {
     return kakaoData;
   }
 
-  async function getUserInfo(password) {
+  function callFindByEmail(email) {
+    findByEmailMutation({
+      variables: {
+        findByEmailInput: {
+          email,
+        },
+      },
+    });
+  }
+
+  async function getUserInfo() {
     const kakaoData = await getToken();
     const access_token = kakaoData.data.access_token;
 
@@ -151,12 +112,8 @@ export default function KakaoCallback({ location }) {
       url: "/v2/user/me",
       success: function (res) {
         console.log(res);
-        const name = res.properties.nickname;
-        const profileImg = res.properties.profile_image;
         const email = res.kakao_account.email;
-        const gender = res.kakao_account.gender;
-        const birth = res.kakao_account.birthday;
-        createKakaoAccount(name, profileImg, email, gender, password, birth);
+        callFindByEmail(email);
       },
       fail: function (error) {
         console.log(error);
@@ -164,10 +121,21 @@ export default function KakaoCallback({ location }) {
     });
   }
 
+  useEffect(() => {
+    getUserInfo();
+  }, []);
+
   const onSubmit = () => {
     if (!loading) {
       const { password } = getValues();
-      getUserInfo(password);
+      loginMutation({
+        variables: {
+          loginInput: {
+            email: findByEmailMutationResult?.findByEmail?.user.email,
+            password,
+          },
+        },
+      });
     }
   };
 
@@ -184,24 +152,33 @@ export default function KakaoCallback({ location }) {
                   </h6>
                 </div>
 
-                {createKakaoAccountMutationResult?.createKakaoAccount?.error ? (
+                {findByEmailMutationResult?.findByEmail?.error ? (
                   <span className="flex justify-center mb-6">
                     <FormError
                       errorMessage={
-                        createKakaoAccountMutationResult?.createKakaoAccount
-                          ?.error
+                        findByEmailMutationResult?.findByEmail?.error
                       }
                     />
                   </span>
                 ) : (
                   <form onSubmit={handleSubmit(onSubmit)}>
-                    <div className="flex justify-center mb-6">
-                      <img
-                        alt="..."
-                        src={
-                          require("assets/img/kakao_login_medium_narrow.png")
-                            .default
+                    <div className="relative w-full mb-3">
+                      <label
+                        className="block uppercase text-blueGray-600 text-xs font-bold mb-2"
+                        htmlFor="grid-password"
+                      >
+                        Your Kakao Email
+                      </label>
+                      <input
+                        type="email"
+                        className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
+                        placeholder="Email"
+                        defaultValue={
+                          accountLoading
+                            ? "Loading..."
+                            : findByEmailMutationResult?.findByEmail?.user.email
                         }
+                        readOnly
                       />
                     </div>
                     <div className="relative w-full mb-3">
@@ -211,9 +188,11 @@ export default function KakaoCallback({ location }) {
                       >
                         Password
                       </label>
-                      {/**passwordRegex = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,25}$/ */}
                       <input
-                        {...register("password")}
+                        {...register("password", {
+                          required: "Password is required",
+                        })}
+                        required
                         type="password"
                         className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
                         placeholder="Password"
@@ -222,39 +201,29 @@ export default function KakaoCallback({ location }) {
                         <FormError errorMessage={errors.password?.message} />
                       )}
                     </div>
-                    <div className="relative w-full mb-3">
-                      <label
-                        className="block uppercase text-blueGray-600 text-xs font-bold mb-2"
-                        htmlFor="grid-password"
-                      >
-                        Check Password
-                      </label>
-                      <input
-                        {...register("confirmPassword")}
-                        type="password"
-                        className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
-                        placeholder="Check your Password"
-                      />
-                      {errors.confirmPassword?.message && (
-                        <FormError
-                          errorMessage={errors.confirmPassword?.message}
+                    <div>
+                      <label className="inline-flex items-center cursor-pointer">
+                        <input
+                          id="customCheckLogin"
+                          type="checkbox"
+                          className="form-checkbox border-0 rounded text-blueGray-700 ml-1 w-5 h-5 ease-linear transition-all duration-150"
                         />
-                      )}
+                        <span className="ml-2 text-sm font-semibold text-blueGray-600">
+                          Remember me
+                        </span>
+                      </label>
                     </div>
+
                     <div className="text-center mt-6">
                       <button
                         className="bg-blueGray-800 text-white active:bg-blueGray-600 text-sm font-bold uppercase px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 w-full ease-linear transition-all duration-150"
                         type="submit"
                       >
-                        {loading ? "Loading~~~" : "Create Account"}
+                        {loading ? "Loading~~~" : "Sign In"}
                       </button>
-                      {createKakaoAccountMutationResult?.createKakaoAccount
-                        .error && (
+                      {loginMutationResult?.login.error && (
                         <FormError
-                          errorMessage={
-                            createKakaoAccountMutationResult.createKakaoAccount
-                              .error
-                          }
+                          errorMessage={loginMutationResult.login.error}
                         />
                       )}
                     </div>
