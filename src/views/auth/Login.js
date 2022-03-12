@@ -8,9 +8,7 @@ import { FormError } from "../../components/formError";
 import { useLogin } from "../../hooks/useLogin";
 import { LOCALSTORAGE_TOKEN } from "../../localToken";
 
-export default function Login() {
-  const history = useHistory();
-
+export default function Login({ history }) {
   const {
     register,
     getValues,

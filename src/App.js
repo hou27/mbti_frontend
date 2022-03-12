@@ -15,9 +15,11 @@ import Landing from "./views/Landing";
 import Profile from "./views/Profile";
 import Index from "./views/main";
 import Search from "./views/search";
+import { loggedInFlag } from "./apollo";
+import { useReactiveVar } from "@apollo/client";
 
 export default function App() {
-  // const isLoggedIn = useReactiveVar(loggedInFlag);
+  const isLoggedIn = useReactiveVar(loggedInFlag);
   // console.log(isLoggedIn);
   return (
     <BrowserRouter>

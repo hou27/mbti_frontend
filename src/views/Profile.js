@@ -24,7 +24,7 @@ const USER_PROFILE_QUERY = gql`
   }
 `;
 
-export default function Profile({ match }) {
+export default function Profile({ match, history }) {
   let userInfo;
   const { data: meData, loading: meLoading } = useMe();
   const { data: userData, loading: userLoading } = useQuery(
@@ -35,6 +35,9 @@ export default function Profile({ match }) {
       },
     }
   );
+  if (!meData) {
+    history.push("/auth/login");
+  }
   // console.log(meData.me.email);
   // console.log(userData);
   if (match.params.id === "0") {
@@ -45,10 +48,6 @@ export default function Profile({ match }) {
       }
     }
   } else {
-    console.log(match.params.id);
-    console.log(userData);
-    // useMe가 아니라 id로 유저를 찾아서 그 값을 띄워야 함.
-
     if (!userLoading) {
       const {
         userProfile: { ok, error, user },
