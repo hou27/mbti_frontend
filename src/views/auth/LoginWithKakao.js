@@ -11,6 +11,7 @@ import { useForm } from "react-hook-form";
 import { useLogin } from "../../hooks/useLogin";
 import { LOCALSTORAGE_TOKEN } from "../../localToken";
 import { jwtTokenVar, loggedInFlag } from "../../apollo";
+import { Link } from "react-router-dom";
 
 const FIND_ACCOUNT_BY_EMAIL_MUTATION = gql`
   mutation findAccountByEmailMutation($findByEmailInput: FindByEmailInput!) {
@@ -153,13 +154,25 @@ export default function KakaoLogin({ location }) {
                 </div>
 
                 {findByEmailMutationResult?.findByEmail?.error ? (
-                  <span className="flex justify-center mb-6">
-                    <FormError
-                      errorMessage={
-                        findByEmailMutationResult?.findByEmail?.error
-                      }
-                    />
-                  </span>
+                  <>
+                    <span className="flex justify-center mb-6">
+                      <FormError
+                        errorMessage={
+                          findByEmailMutationResult?.findByEmail?.error
+                        }
+                      />
+                    </span>
+                    <div className="text-center">
+                      <Link to="/auth/register" className="text-green-700">
+                        <button
+                          className="bg-indigo-500 text-white active:bg-indigo-600 text-xs font-bold uppercase px-4 py-2 rounded shadow hover:shadow-lg outline-none focus:outline-none lg:mr-1 lg:mb-0 ml-3 mb-3 ease-linear transition-all duration-150"
+                          type="button"
+                        >
+                          Create new account
+                        </button>
+                      </Link>
+                    </div>
+                  </>
                 ) : (
                   <form onSubmit={handleSubmit(onSubmit)}>
                     <div className="relative w-full mb-3">

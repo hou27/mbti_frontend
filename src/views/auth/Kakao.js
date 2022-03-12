@@ -48,7 +48,7 @@ export default function KakaoCallback({ location }) {
     } = data;
     if (ok) {
       alert("Log in now!");
-      history.push("/");
+      history.push("/auth/login");
     } else if (error) {
       console.log(error);
     } else console.log(data);

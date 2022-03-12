@@ -7,7 +7,7 @@ import {
 import { setContext } from "@apollo/client/link/context";
 import { LOCALSTORAGE_TOKEN } from "./localToken";
 
-const URI = "http://localhost:4000/graphql";
+const URI = "http://192.168.219.100:4000/graphql";
 const token = localStorage.getItem(LOCALSTORAGE_TOKEN);
 export const jwtTokenVar = makeVar(token);
 export const loggedInFlag = makeVar(Boolean(token));
