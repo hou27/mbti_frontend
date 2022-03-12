@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import IndexNavbar from "../components/Navbars/IndexNavbar.js";
 import Footer from "../components/Footers/Footer.js";
@@ -8,6 +8,15 @@ import Footer from "../components/Footers/Footer.js";
 import SearchUserResult from "../components/SearchUserResult.js";
 
 export default function Search({ color }) {
+  const [searchInput, setSearchInput] = useState("");
+  const handleInput = (event) => {
+    setSearchInput(event.target.value);
+  };
+
+  // useEffect(() => {
+  // 	return searchInput.length > 0 ? handleSubmit(searchInput) : null;
+  // }, [searchInput]);
+
   return (
     <>
       <IndexNavbar fixed />
@@ -20,6 +29,8 @@ export default function Search({ color }) {
                 <i className="fas fa-search"></i>
               </span>
               <input
+                value={searchInput}
+                onChange={handleInput}
                 type="text"
                 placeholder="Search here..."
                 className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 relative bg-white rounded text-sm shadow outline-none focus:outline-none focus:ring w-full pl-10"
@@ -113,9 +124,8 @@ export default function Search({ color }) {
                 </thead>
                 {/** User Row */}
                 <SearchUserResult
-                  name={""}
+                  name={searchInput}
                   color={color}
-                  history
                 ></SearchUserResult>
               </table>
             </div>
