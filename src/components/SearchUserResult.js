@@ -1,5 +1,6 @@
 import { gql, useLazyQuery } from "@apollo/client";
 import React, { useEffect } from "react";
+import { Link } from "react-router-dom";
 import TableDropdown from "./Dropdowns/TableDropdown";
 
 const SEARCH_USER = gql`
@@ -49,21 +50,23 @@ export default function SearchUserResult({ name, color }) {
       ) : data?.searchUser?.users ? (
         data?.searchUser.users?.map((item, index) => (
           <tr key={item.id}>
-            <th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left flex items-center">
-              <img
-                src={require("assets/img/sketch.jpg").default}
-                className="h-12 w-12 bg-white rounded-full border"
-                alt="..."
-              ></img>{" "}
-              <span
-                className={
-                  "ml-3 font-bold " +
-                  +(color === "light" ? "text-blueGray-600" : "text-white")
-                }
-              >
-                {item.name}
-              </span>
-            </th>
+            <Link to="/research">
+              <th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left flex items-center">
+                <img
+                  src={require("assets/img/sketch.jpg").default}
+                  className="h-12 w-12 bg-white rounded-full border"
+                  alt="..."
+                ></img>{" "}
+                <span
+                  className={
+                    "ml-3 font-bold " +
+                    +(color === "light" ? "text-blueGray-600" : "text-white")
+                  }
+                >
+                  {item.name}
+                </span>
+              </th>
+            </Link>
             <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
               $3,150 USD
             </td>
