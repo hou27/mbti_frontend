@@ -1,29 +1,16 @@
 // @ts-ignore
 import React, { useEffect } from "react";
-import { gql, useMutation } from "@apollo/client";
 import axios from "axios";
 import qs from "qs";
 import queryString from "query-string";
 
-import { useHistory } from "react-router-dom";
 import { FormError } from "../../components/formError";
 import { useForm } from "react-hook-form";
 import { useLogin } from "../../hooks/useLogin";
 import { LOCALSTORAGE_TOKEN } from "../../localToken";
 import { jwtTokenVar, loggedInFlag } from "../../apollo";
 import { Link } from "react-router-dom";
-
-const FIND_ACCOUNT_BY_EMAIL_MUTATION = gql`
-  mutation findAccountByEmailMutation($findByEmailInput: FindByEmailInput!) {
-    findByEmail(input: $findByEmailInput) {
-      ok
-      error
-      user {
-        email
-      }
-    }
-  }
-`;
+import { useFindByEmail } from "../../hooks/useFindByEmail";
 
 export default function KakaoLogin({ location, history }) {
   // Init Kakao api
@@ -58,72 +45,78 @@ export default function KakaoLogin({ location, history }) {
     }
   };
 
-  // Declare mutation
+  // Declare query, mutations
 
   const [
-    findByEmailMutation,
+    searchUserQuery,
     { data: findByEmailMutationResult, loading: accountLoading },
-  ] = useMutation(FIND_ACCOUNT_BY_EMAIL_MUTATION, {});
+  ] = useFindByEmail();
+
+  // const [
+  //   findByEmailMutation,
+  //   { data: findByEmailMutationResult, loading: accountLoading },
+  // ] = useMutation(FIND_ACCOUNT_BY_EMAIL_MUTATION, {});
 
   const [loginMutation, { data: loginMutationResult, loading }] =
     useLogin(onCompleted);
 
-  /** get user info */
-
-  async function getToken() {
-    const { code } = qs.parse(location.search, {
-      ignoreQueryPrefix: true,
-    });
-    const formData = {
-      grant_type: "authorization_code",
-      client_id: process.env.REACT_APP_KAKAO_REST_API_KEY,
-      redirect_uri: process.env.REACT_APP_REDIRECT_URI_LOGIN,
-      code,
-      client_secret: process.env.REACT_APP_CLIENT_SECRET,
-    };
-    const kakaoData = await axios
-      .post(
-        `https://kauth.kakao.com/oauth/token?${queryString.stringify(formData)}`
-      )
-      .then((res) => {
-        return res;
-      });
-    return kakaoData;
-  }
-
-  function callFindByEmail(email) {
-    findByEmailMutation({
-      variables: {
-        findByEmailInput: {
-          email,
-        },
-      },
-    });
-  }
-
-  async function getUserInfo() {
-    const kakaoData = await getToken();
-    const access_token = kakaoData.data.access_token;
-
-    // @ts-ignore
-    window.Kakao.Auth.setAccessToken(access_token);
-    // @ts-ignore
-    window.Kakao.API.request({
-      url: "/v2/user/me",
-      success: function (res) {
-        console.log(res);
-        const email = res.kakao_account.email;
-        callFindByEmail(email);
-      },
-      fail: function (error) {
-        console.log(error);
-      },
-    });
-  }
-
   useEffect(() => {
+    /** get user info */
+
+    async function getToken() {
+      const { code } = qs.parse(location.search, {
+        ignoreQueryPrefix: true,
+      });
+      const formData = {
+        grant_type: "authorization_code",
+        client_id: process.env.REACT_APP_KAKAO_REST_API_KEY,
+        redirect_uri: process.env.REACT_APP_REDIRECT_URI_LOGIN,
+        code,
+        client_secret: process.env.REACT_APP_CLIENT_SECRET,
+      };
+      const kakaoData = await axios
+        .post(
+          `https://kauth.kakao.com/oauth/token?${queryString.stringify(
+            formData
+          )}`
+        )
+        .then((res) => {
+          return res;
+        });
+      return kakaoData;
+    }
+
+    function callFindByEmail(email) {
+      searchUserQuery({
+        variables: {
+          findByEmailInput: {
+            email,
+          },
+        },
+      });
+    }
+
+    async function getUserInfo() {
+      const kakaoData = await getToken();
+      const access_token = kakaoData.data.access_token;
+
+      // @ts-ignore
+      window.Kakao.Auth.setAccessToken(access_token);
+      // @ts-ignore
+      window.Kakao.API.request({
+        url: "/v2/user/me",
+        success: function (res) {
+          console.log(res);
+          const email = res.kakao_account.email;
+          callFindByEmail(email);
+        },
+        fail: function (error) {
+          console.log(error);
+        },
+      });
+    }
     getUserInfo();
-  }, []);
+  }, [location, searchUserQuery]); // dependency
 
   const onSubmit = () => {
     if (!loading) {

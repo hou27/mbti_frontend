@@ -1,4 +1,4 @@
-import { gql, useQuery } from "@apollo/client";
+import { gql, useLazyQuery } from "@apollo/client";
 
 const FIND_BY_EMAIL_QUERY = gql`
   query findByEmailQuery($findByEmailInput: FindByEmailInput!) {
@@ -12,13 +12,6 @@ const FIND_BY_EMAIL_QUERY = gql`
   }
 `;
 
-export const UseFindByEmail = (email) => {
-  const { data, loading } = useQuery(FIND_BY_EMAIL_QUERY, {
-    variables: {
-      findByEmailInput: {
-        email,
-      },
-    },
-  });
-  return { data, loading };
+export const useFindByEmail = () => {
+  return useLazyQuery(FIND_BY_EMAIL_QUERY);
 };
