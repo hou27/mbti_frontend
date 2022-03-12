@@ -10,7 +10,7 @@ import FooterSmall from "../components/Footers/FooterSmall.js";
 
 import Login from "../views/auth/Login.js";
 import Register from "../views/auth/Register.js";
-import KakaoCallback from "../views/auth/Kakao.js";
+import KakaoAuth from "../views/auth/KakaoAuth.js";
 import KakaoLogin from "../views/auth/LoginWithKakao.js";
 
 export default function Auth() {
@@ -29,7 +29,7 @@ export default function Auth() {
           <Switch>
             <Route path="/auth/login" exact component={Login} />
             <Route path="/auth/register" exact component={Register} />
-            <Route path="/auth/kakao" exact component={KakaoCallback} />
+            <Route path="/auth/kakao" exact component={KakaoAuth} />
             <Route path="/auth/kakaologin" exact component={KakaoLogin} />
             <Redirect from="/auth" to="/auth/login" />
           </Switch>

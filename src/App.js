@@ -15,17 +15,10 @@ import Landing from "./views/Landing";
 import Profile from "./views/Profile";
 import Index from "./views/main";
 import Search from "./views/search";
-import { gql, useQuery, useReactiveVar } from "@apollo/client";
-import { loggedInFlag } from "./apollo";
 
-// const IS_LOGGED_IN = gql`
-//   query checkLogin {
-//     isLoggedIn @client
-//   }
-// `;
 export default function App() {
-  const isLoggedIn = useReactiveVar(loggedInFlag);
-  console.log(isLoggedIn);
+  // const isLoggedIn = useReactiveVar(loggedInFlag);
+  // console.log(isLoggedIn);
   return (
     <BrowserRouter>
       <Switch>
@@ -35,7 +28,7 @@ export default function App() {
         {/* add routes without layouts */}
         <Route path="/search" exact component={Search} />
         <Route path="/research" exact component={Landing} />
-        <Route path="/profile" exact component={Profile} />
+        <Route path="/profile/:id" exact component={Profile} />
         <Route path="/" exact component={Index} />
         {/* add redirect for first page */}
         <Redirect from="*" to="/" />

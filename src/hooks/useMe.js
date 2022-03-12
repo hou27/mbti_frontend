@@ -8,7 +8,9 @@ export const ME_QUERY = gql`
       profileImg
       email
       gender
+      verified
       birth
+      bio
     }
   }
 `;

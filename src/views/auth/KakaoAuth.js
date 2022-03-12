@@ -31,7 +31,7 @@ const FIND_ACCOUNT_BY_EMAIL_MUTATION = gql`
   }
 `;
 
-export default function KakaoCallback({ location }) {
+export default function KakaoAuth({ location }) {
   // Init Kakao api
   // @ts-ignore
   if (!window.Kakao.isInitialized()) {

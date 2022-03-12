@@ -12,7 +12,7 @@ import FooterAdmin from "../components/Footers/FooterAdmin.js";
 
 import Dashboard from "../views/admin/Dashboard.js";
 import Maps from "../views/admin/Maps.js";
-import Settings from "../views/admin/Settings.js";
+import EditProfile from "../views/admin/EditProfile.js";
 import Tables from "../views/admin/Tables.js";
 
 export default function Admin() {
@@ -26,7 +26,7 @@ export default function Admin() {
           <Switch>
             <Route path="/admin/dashboard" exact component={Dashboard} />
             <Route path="/admin/maps" exact component={Maps} />
-            <Route path="/admin/settings" exact component={Settings} />
+            <Route path="/admin/editprofile" exact component={EditProfile} />
             <Route path="/admin/tables" exact component={Tables} />
             <Redirect from="/admin" to="/admin/dashboard" />
           </Switch>

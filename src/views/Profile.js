@@ -3,10 +3,61 @@ import { Link } from "react-router-dom";
 import Navbar from "../components/Navbars/AuthNavbar.js";
 import Footer from "../components/Footers/Footer.js";
 import { useMe } from "../hooks/useMe.js";
+import { gql, useQuery } from "@apollo/client";
 
-export default function Profile() {
-  const { data, loading, error } = useMe();
-  // useMe가 아니라 id로 유저를 찾아서 그 값을 띄워야 함.
+const USER_PROFILE_QUERY = gql`
+  query userProfile($userId: Float!) {
+    userProfile(userId: $userId) {
+      ok
+      error
+      user {
+        id
+        name
+        profileImg
+        email
+        gender
+        verified
+        birth
+        bio
+      }
+    }
+  }
+`;
+
+export default function Profile({ match }) {
+  let userInfo;
+  const { data: meData, loading: meLoading } = useMe();
+  const { data: userData, loading: userLoading } = useQuery(
+    USER_PROFILE_QUERY,
+    {
+      variables: {
+        userId: +match.params.id,
+      },
+    }
+  );
+  // console.log(meData.me.email);
+  // console.log(userData);
+  if (match.params.id === "0") {
+    if (!meLoading) {
+      const { me } = meData;
+      if (me) {
+        userInfo = me;
+      }
+    }
+  } else {
+    console.log(match.params.id);
+    console.log(userData);
+    // useMe가 아니라 id로 유저를 찾아서 그 값을 띄워야 함.
+
+    if (!userLoading) {
+      const {
+        userProfile: { ok, error, user },
+      } = userData;
+      if (ok) {
+        userInfo = user;
+      }
+    }
+  }
 
   return (
     <>
@@ -52,11 +103,14 @@ export default function Profile() {
                 <div className="flex flex-wrap justify-center">
                   <div className="w-full lg:w-3/12 px-4 lg:order-2 flex justify-center">
                     <div className="relative">
+                      {/*userData?.userProfile?.user.profileImg*/}
                       <img
                         alt="..."
                         src={
-                          data?.me?.profileImg
-                            ? data.me.profileImg
+                          userInfo
+                            ? userInfo.profileImg
+                              ? userInfo.profileImg
+                              : require("assets/img/user.png").default
                             : require("assets/img/user.png").default
                         }
                         className="shadow-xl rounded-full h-auto align-middle border-none absolute -m-16 -ml-20 lg:-ml-16 max-w-150-px"
@@ -65,12 +119,26 @@ export default function Profile() {
                   </div>
                   <div className="w-full lg:w-4/12 px-4 lg:order-3 lg:text-right lg:self-center">
                     <div className="py-6 px-3 mt-32 sm:mt-0">
-                      <Link to="/search">
+                      <Link
+                        to={
+                          !meLoading && !userLoading
+                            ? match.params.id === "0" ||
+                              userInfo?.email === userData?.email
+                              ? "/admin/editprofile"
+                              : "/search"
+                            : "..."
+                        }
+                      >
                         <button
                           className="bg-lightBlue-500 active:bg-lightBlue-600 uppercase text-white font-bold hover:shadow-md shadow text-xs px-4 py-2 rounded outline-none focus:outline-none sm:mr-2 mb-1 ease-linear transition-all duration-150"
                           type="button"
                         >
-                          검사하기
+                          {!meLoading && !userLoading
+                            ? match.params.id === "0" ||
+                              userInfo?.email === userData?.email
+                              ? "프로필 편집"
+                              : "검사하기"
+                            : "Loading..."}
                         </button>
                       </Link>
                     </div>
@@ -104,37 +172,52 @@ export default function Profile() {
                     </div>
                   </div>
                 </div>
-                <div className="text-center mt-12">
-                  <h3 className="text-4xl font-semibold leading-normal text-blueGray-700 mb-2">
-                    {data?.me?.name ? data.me?.name : "No Info"}
-                  </h3>
-                  <div className="text-sm leading-normal mt-0 mb-2 text-blueGray-400 font-bold uppercase">
-                    <i className="fas fa-map-marker-alt mr-2 text-lg text-blueGray-400"></i>{" "}
-                    {data?.me?.birth ? data.me?.birth : "enter your birth"}
+                {userInfo ? (
+                  <>
+                    <div className="text-center mt-12">
+                      <h3 className="text-4xl font-semibold leading-normal text-blueGray-700 mb-2">
+                        {userInfo.name ? userInfo.name : "No Info"}
+                      </h3>
+                      <div className="text-sm leading-normal mt-0 mb-2 text-blueGray-400 font-bold uppercase">
+                        <i className="fas fa-map-marker-alt mr-2 text-lg text-blueGray-400"></i>{" "}
+                        {userInfo.birth ? userInfo.birth : "enter your birth"}
+                      </div>
+                      <div className="mb-2 text-blueGray-600 mt-10">
+                        <i className="fas fa-briefcase mr-2 text-lg text-blueGray-400"></i>
+                        {userInfo.bio
+                          ? userInfo.bio
+                          : "You can enter anything here."}
+                      </div>
+                      <div className="mb-2 text-blueGray-600">
+                        <i className="fas fa-university mr-2 text-lg text-blueGray-400"></i>
+                        {userInfo.email ? userInfo.email : "No Info"}
+                      </div>
+                    </div>
+                  </>
+                ) : (
+                  <div className="text-center mt-12">
+                    <h3 className="text-4xl font-semibold leading-normal text-blueGray-700 mb-2">
+                      "No Info"
+                    </h3>
                   </div>
-                  <div className="mb-2 text-blueGray-600 mt-10">
-                    <i className="fas fa-briefcase mr-2 text-lg text-blueGray-400"></i>
-                    {data?.me?.bio
-                      ? data.me?.bio
-                      : "You can enter anything here."}
-                  </div>
-                  <div className="mb-2 text-blueGray-600">
-                    <i className="fas fa-university mr-2 text-lg text-blueGray-400"></i>
-                    {data?.me?.email ? data.me.email : "No Info"}
-                  </div>
-                </div>
+                )}
                 <div className="mt-10 py-10 border-t border-blueGray-200 text-center">
                   <div className="flex flex-wrap justify-center">
                     <div className="w-full lg:w-9/12 px-4">
                       <p className="mb-4 text-lg leading-relaxed text-blueGray-700">
-                        {data?.me?.bio ? (
-                          data.me?.bio
+                        {userInfo ? (
+                          userInfo.bio ? (
+                            userInfo.bio
+                          ) : (
+                            <p>
+                              enter your bio
+                              <br />
+                              ex) Info like your MBTI or some links like your
+                              SNS.
+                            </p>
+                          )
                         ) : (
-                          <p>
-                            enter your bio
-                            <br />
-                            ex) Info like your MBTI or some links like your SNS.
-                          </p>
+                          "No Info"
                         )}
                       </p>
                       <a
