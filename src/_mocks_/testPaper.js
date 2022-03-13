@@ -25,7 +25,7 @@ const T = [...Array(18)].map((_, index) => {
   return {
     id: index,
     question: QUESTION_T_F[index],
-    type: "S_N",
+    type: "T_F",
     flag: index % 2 === 0,
   };
 });
@@ -34,9 +34,9 @@ const J = [...Array(18)].map((_, index) => {
   return {
     id: index,
     question: QUESTION_J_P[index],
-    type: "S_N",
+    type: "J_P",
     flag: index % 2 === 0,
   };
 });
 
-export const testPaper = { E, S, T, J };
+export const TEST_PAPER = { E, S, T, J };

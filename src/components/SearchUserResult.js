@@ -50,7 +50,14 @@ export default function SearchUserResult({ name, color }) {
       ) : data?.searchUser?.users ? (
         data?.searchUser.users?.map((item, index) => (
           <tr key={item.id}>
-            <Link to="/research">
+            <Link
+              to={{
+                pathname: `/research/${item.id}`,
+                state: {
+                  name: item.name,
+                },
+              }}
+            >
               <th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left flex items-center">
                 <img
                   src={require("assets/img/sketch.jpg").default}
