@@ -15,7 +15,7 @@ const CREATEACCOUNT_MUTATION = gql`
   }
 `;
 
-export default function Register() {
+export default function Register({ history }) {
   const formSchema = Yup.object().shape({
     name: Yup.string().required("Name is required"),
     email: Yup.string()
@@ -43,7 +43,6 @@ export default function Register() {
     mode: "onChange",
     resolver: yupResolver(formSchema),
   });
-  const history = useHistory();
   const onCompleted = (data) => {
     const {
       createAccount: { ok },

@@ -39,4 +39,4 @@ const J = [...Array(9)].map((_, index) => {
   };
 });
 
-export const TEST_PAPER = { E, S, T, J };
+export const TEST_PAPER = [E, S, T, J];

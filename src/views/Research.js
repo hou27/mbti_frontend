@@ -13,10 +13,20 @@ import * as Yup from "yup";
 import { FormError } from "../components/formError.js";
 import { TEST_PAPER } from "../_mocks_/testPaper.js";
 import TestPaper from "../components/TestPaper/TestPaper.js";
+import { gql, useMutation } from "@apollo/client";
 
-export default function Research({ match, location }) {
+const ANALYSIS_TEST_MUTATION = gql`
+  mutation analysisTest($analysisTestInput: AnalysisTestInput!) {
+    analysis(input: $analysisTestInput) {
+      ok
+      error
+      mbti
+    }
+  }
+`;
+
+export default function Research({ match, location, history }) {
   const questions = TEST_PAPER;
-  console.log(questions);
   const formSchema = Yup.object().shape({
     decision: Yup.number()
       .required("Selecting the decision field is required")
@@ -27,10 +37,43 @@ export default function Research({ match, location }) {
     getValues,
     formState: { errors },
     handleSubmit,
+    watch,
   } = useForm({
     mode: "onChange",
     resolver: yupResolver(formSchema),
   });
+  console.log(watch("J_P8"));
+
+  const onCompleted = (data) => {
+    const {
+      login: { ok, token },
+    } = data;
+    if (ok && token) {
+      history.push("/");
+    }
+  };
+
+  const [analysisTestMutation, { data, loading }] = useMutation(
+    ANALYSIS_TEST_MUTATION,
+    {
+      onCompleted,
+    }
+  );
+
+  const onSubmit = () => {
+    if (!loading) {
+      const { J_P8 } = getValues();
+      console.log(J_P8);
+      history.push("/");
+      analysisTestMutation({
+        variables: {
+          analysisTestInput: {
+            J_P8,
+          },
+        },
+      });
+    }
+  };
 
   return (
     <>
@@ -57,7 +100,7 @@ export default function Research({ match, location }) {
                     className="text-emerald-500 bg-transparent border border-solid border-emerald-500 hover:bg-emerald-500 hover:text-white active:bg-emerald-600 font-bold uppercase px-8 py-3 rounded outline-none focus:outline-none mr-1 mb-8 ease-linear transition-all duration-150"
                     type="button"
                   >
-                    {location.state.name}
+                    {location.state?.name ? location.state?.name : "nonamed"}
                   </button>
                 </Link>
                 <div className="py-12">
@@ -140,10 +183,13 @@ export default function Research({ match, location }) {
           </div>
         </section>
         <section className="relative py-20">
-          <TestPaper question={questions.E}></TestPaper>
-          <TestPaper question={questions.S}></TestPaper>
-          <TestPaper question={questions.T}></TestPaper>
-          <TestPaper question={questions.J}></TestPaper>
+          <form
+            onSubmit={() => {
+              handleSubmit(onSubmit);
+            }}
+          >
+            <TestPaper question={questions}></TestPaper>
+          </form>
         </section>
         <section className="pt-20 pb-48">
           <div className="container mx-auto px-4">

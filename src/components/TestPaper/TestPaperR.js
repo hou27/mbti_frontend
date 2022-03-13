@@ -67,23 +67,23 @@ export default function TestPaperR({ question: q }) {
                   <label className="inline-flex items-center cursor-pointer">
                     <span className="text-sm font-semibold text-blueGray-600">
                       <input
-                        {...register("decision")}
+                        {...register(`${q.type}${q.id}`)}
                         type="radio"
                         id={q.id}
                         name={`${q.type}${q.id}`}
                         value="0"
-                        className="form-radio border-0 rounded text-blueGray-700 ml-1 mr-3 w-5 h-5 ease-linear transition-all duration-150"
+                        className="bg-indigo-200 form-radio border-0 rounded text-blueGray-700 ml-1 mr-3 w-5 h-5 ease-linear transition-all duration-150"
                       />
                       <label htmlFor={q.id} className="mr-3">
                         1
                       </label>
                       <input
-                        {...register("decision")}
+                        {...register(`${q.type}${q.id}`)}
                         type="radio"
                         id={q.id + 1}
                         name={`${q.type}${q.id}`}
                         value="1"
-                        className="form-radio border-0 rounded text-blueGray-700 ml-1 mr-3 w-5 h-5 ease-linear transition-all duration-150"
+                        className="bg-indigo-200 form-radio border-0 rounded text-blueGray-700 ml-1 mr-3 w-5 h-5 ease-linear transition-all duration-150"
                       />
                       <label htmlFor={q.id} className="mr-3">
                         2
