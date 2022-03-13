@@ -3,7 +3,7 @@ import { QUESTION_J_P } from "./J_P";
 import { QUESTION_S_N } from "./S_N";
 import { QUESTION_T_F } from "./T_F";
 
-const E = [...Array(18)].map((_, index) => {
+const E = [...Array(9)].map((_, index) => {
   return {
     id: index,
     question: QUESTION_E_I[index],
@@ -12,7 +12,7 @@ const E = [...Array(18)].map((_, index) => {
   };
 });
 
-const S = [...Array(18)].map((_, index) => {
+const S = [...Array(9)].map((_, index) => {
   return {
     id: index,
     question: QUESTION_S_N[index],
@@ -21,7 +21,7 @@ const S = [...Array(18)].map((_, index) => {
   };
 });
 
-const T = [...Array(18)].map((_, index) => {
+const T = [...Array(9)].map((_, index) => {
   return {
     id: index,
     question: QUESTION_T_F[index],
@@ -30,7 +30,7 @@ const T = [...Array(18)].map((_, index) => {
   };
 });
 
-const J = [...Array(18)].map((_, index) => {
+const J = [...Array(9)].map((_, index) => {
   return {
     id: index,
     question: QUESTION_J_P[index],

@@ -12,10 +12,11 @@ import { useForm } from "react-hook-form";
 import * as Yup from "yup";
 import { FormError } from "../components/formError.js";
 import { TEST_PAPER } from "../_mocks_/testPaper.js";
-import TestPaper from "../components/TestPaper.js";
+import TestPaper from "../components/TestPaper/TestPaper.js";
 
 export default function Research({ match, location }) {
   const questions = TEST_PAPER;
+  console.log(questions);
   const formSchema = Yup.object().shape({
     decision: Yup.number()
       .required("Selecting the decision field is required")
@@ -138,7 +139,12 @@ export default function Research({ match, location }) {
             </div>
           </div>
         </section>
-        <TestPaper question={questions}></TestPaper>
+        <section className="relative py-20">
+          <TestPaper question={questions.E}></TestPaper>
+          <TestPaper question={questions.S}></TestPaper>
+          <TestPaper question={questions.T}></TestPaper>
+          <TestPaper question={questions.J}></TestPaper>
+        </section>
         <section className="pt-20 pb-48">
           <div className="container mx-auto px-4">
             <div className="flex flex-wrap justify-center text-center mb-24">

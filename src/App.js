@@ -19,8 +19,8 @@ import { loggedInFlag } from "./apollo";
 import { useReactiveVar } from "@apollo/client";
 
 export default function App() {
-  const isLoggedIn = useReactiveVar(loggedInFlag);
-  // console.log(isLoggedIn);
+  useReactiveVar(loggedInFlag);
+
   return (
     <BrowserRouter>
       <Switch>
