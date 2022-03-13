@@ -39,7 +39,7 @@ export default function TestPaperL({ question: q }) {
               <div className="text-lightBlue-600 p-3 text-center inline-flex items-center justify-center w-16 h-16 mb-6 shadow-lg rounded-full bg-lightBlue-300">
                 <i className="fas fa-rocket text-xl"></i>
               </div>
-              <h3 className="text-3xl font-semibold">A growing company</h3>
+              <h3 className="text-3xl font-semibold">Check other's MBTI</h3>
               <p className="mt-4 text-lg leading-relaxed text-blueGray-500">
                 The extension comes with three pre-built pages to help you get
                 started faster. You can change the text and images and you're
@@ -76,24 +76,23 @@ export default function TestPaperL({ question: q }) {
                       <input
                         {...register("decision")}
                         type="radio"
-                        id={q.index}
-                        name="decision"
+                        id={q.id}
+                        name={`${q.type}${q.id}`}
                         value="0"
                         className="form-radio border-0 rounded text-blueGray-700 ml-1 mr-3 w-5 h-5 ease-linear transition-all duration-150"
-                        defaultChecked
                       />
-                      <label htmlFor={q.type} className="mr-3">
+                      <label htmlFor={q.id} className="mr-3">
                         1
                       </label>
                       <input
                         {...register("decision")}
                         type="radio"
-                        id={q.index + 1}
-                        name="decision"
+                        id={q.id + 1}
+                        name={`${q.type}${q.id}`}
                         value="1"
                         className="form-radio border-0 rounded text-blueGray-700 ml-1 mr-3 w-5 h-5 ease-linear transition-all duration-150"
                       />
-                      <label htmlFor={q.type} className="mr-3">
+                      <label htmlFor={q.id} className="mr-3">
                         2
                       </label>
                     </span>
