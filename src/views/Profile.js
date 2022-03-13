@@ -35,7 +35,7 @@ export default function Profile({ match, history }) {
       },
     }
   );
-  if (!meData) {
+  if (!meLoading && !meData) {
     history.push("/auth/login");
   }
   // console.log(meData.me.email);
@@ -101,20 +101,17 @@ export default function Profile({ match, history }) {
               <div className="px-6">
                 <div className="flex flex-wrap justify-center">
                   <div className="w-full lg:w-3/12 px-4 lg:order-2 flex justify-center">
-                    <div className="relative">
-                      {/*userData?.userProfile?.user.profileImg*/}
-                      <img
-                        alt="..."
-                        src={
-                          userInfo
+                    <img
+                      alt="..."
+                      src={
+                        userInfo
+                          ? userInfo.profileImg
                             ? userInfo.profileImg
-                              ? userInfo.profileImg
-                              : require("assets/img/user.png").default
                             : require("assets/img/user.png").default
-                        }
-                        className="shadow-xl rounded-full h-auto align-middle border-none absolute -m-16 -ml-20 lg:-ml-16 max-w-150-px"
-                      />
-                    </div>
+                          : require("assets/img/user.png").default
+                      }
+                      className="shadow-xl object-cover h-150-px rounded-full align-middle border-none absolute -m-16 -ml-20 lg:-ml-16 w-150-px"
+                    />
                   </div>
                   <div className="w-full lg:w-4/12 px-4 lg:order-3 lg:text-right lg:self-center">
                     <div className="py-6 px-3 mt-32 sm:mt-0">

@@ -50,7 +50,7 @@ export default function Register() {
     } = data;
     if (ok) {
       alert("Log in now!");
-      history.push("/");
+      history.push("/auth/login");
     } else console.log(ok);
   };
   const [
