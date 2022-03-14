@@ -4,6 +4,7 @@ import Navbar from "../components/Navbars/AuthNavbar.js";
 import Footer from "../components/Footers/Footer.js";
 import { useMe } from "../hooks/useMe.js";
 import { gql, useQuery } from "@apollo/client";
+import { loggedInFlag } from "../apollo.js";
 
 const USER_PROFILE_QUERY = gql`
   query userProfile($userId: Float!) {
@@ -19,6 +20,20 @@ const USER_PROFILE_QUERY = gql`
         verified
         birth
         bio
+      }
+      myResult {
+        mbti
+        tester {
+          id
+          name
+        }
+      }
+      userList {
+        mbti
+        user {
+          id
+          name
+        }
       }
     }
   }
@@ -36,24 +51,23 @@ export default function Profile({ match, history }) {
       },
     }
   );
-  if (!meLoading && !meData) {
+  if (!loggedInFlag()) {
     history.push("/auth/login");
   } else if (!meLoading) {
     const { me } = meData;
     if (me) {
       meInfo = me;
+      userInfo = me;
     }
   }
-  if (match.params.id === "0") {
-  } else {
-    if (!userLoading) {
-      const {
-        userProfile: { ok, error, user },
-      } = userData;
-      if (ok) {
-        userInfo = user;
-      }
+  if (!userLoading && +match.params.id !== 0) {
+    const {
+      userProfile: { ok, error, user },
+    } = userData;
+    if (ok) {
+      userInfo = user;
     }
+    console.log(userInfo);
   }
 
   return (
@@ -171,25 +185,25 @@ export default function Profile({ match, history }) {
                     </div>
                   </div>
                 </div>
-                {userInfo ? (
+                {!userLoading ? (
                   <>
                     <div className="text-center mt-12">
                       <h3 className="text-4xl font-semibold leading-normal text-blueGray-700 mb-2">
-                        {userInfo.name ? userInfo.name : "No Info"}
+                        {userInfo?.name ? userInfo.name : "No Info"}
                       </h3>
                       <div className="text-sm leading-normal mt-0 mb-2 text-blueGray-400 font-bold uppercase">
                         <i className="fas fa-map-marker-alt mr-2 text-lg text-blueGray-400"></i>{" "}
-                        {userInfo.birth ? userInfo.birth : "enter your birth"}
+                        {userInfo?.birth ? userInfo.birth : "enter your birth"}
                       </div>
                       <div className="mb-2 text-blueGray-600 mt-10">
                         <i className="fas fa-briefcase mr-2 text-lg text-blueGray-400"></i>
-                        {userInfo.bio
-                          ? userInfo.bio
+                        {userInfo?.bio
+                          ? userInfo?.bio
                           : "You can enter anything here."}
                       </div>
                       <div className="mb-2 text-blueGray-600">
                         <i className="fas fa-university mr-2 text-lg text-blueGray-400"></i>
-                        {userInfo.email ? userInfo.email : "No Info"}
+                        {userInfo?.email ? userInfo?.email : "No Info"}
                       </div>
                     </div>
                   </>
@@ -204,9 +218,9 @@ export default function Profile({ match, history }) {
                   <div className="flex flex-wrap justify-center">
                     <div className="w-full lg:w-9/12 px-4">
                       <p className="mb-4 text-lg leading-relaxed text-blueGray-700">
-                        {userInfo ? (
-                          userInfo.bio ? (
-                            userInfo.bio
+                        {!userLoading ? (
+                          userInfo?.bio ? (
+                            userInfo?.bio
                           ) : (
                             <p>
                               enter your bio

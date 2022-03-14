@@ -34,10 +34,12 @@ export default function TestPaper({ question, history, id: userId }) {
 
   const onCompleted = (data) => {
     const {
-      login: { ok, testResult },
+      analysisTest: { ok, error, testResult },
     } = data;
     if (ok && testResult) {
       console.log(testResult);
+    } else if (error) {
+      console.log(error);
     }
   };
 
