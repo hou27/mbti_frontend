@@ -3,26 +3,12 @@ import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useForm } from "react-hook-form";
+import { useFormContext } from "react-hook-form";
 import * as Yup from "yup";
 import { FormError } from "../formError.js";
 
 export default function TestPaperR({ question: q }) {
-  const formSchema = Yup.object().shape({
-    decision: Yup.number()
-      .required("Selecting the decision field is required")
-      .oneOf([0, 1], "Must be one of 0, 1"),
-  });
-  const {
-    register,
-    getValues,
-    formState: { errors },
-    handleSubmit,
-  } = useForm({
-    mode: "onChange",
-    resolver: yupResolver(formSchema),
-  });
-
+  const { register } = useFormContext();
   return (
     <>
       <div className="container mx-auto px-4" key={q.id}>
@@ -67,7 +53,10 @@ export default function TestPaperR({ question: q }) {
                   <label className="inline-flex items-center cursor-pointer">
                     <span className="text-sm font-semibold text-blueGray-600">
                       <input
-                        {...register(`${q.type}${q.id}`)}
+                        {...register(`${q.type}${q.id}`, {
+                          required: "Value is required",
+                        })}
+                        required
                         type="radio"
                         id={q.id}
                         name={`${q.type}${q.id}`}
@@ -89,9 +78,6 @@ export default function TestPaperR({ question: q }) {
                         2
                       </label>
                     </span>
-                    {errors.decision?.message && (
-                      <FormError errorMessage={errors.decision?.message} />
-                    )}
                   </label>
                 </li>
               </ul>

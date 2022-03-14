@@ -13,67 +13,9 @@ import * as Yup from "yup";
 import { FormError } from "../components/formError.js";
 import { TEST_PAPER } from "../_mocks_/testPaper.js";
 import TestPaper from "../components/TestPaper/TestPaper.js";
-import { gql, useMutation } from "@apollo/client";
-
-const ANALYSIS_TEST_MUTATION = gql`
-  mutation analysisTest($analysisTestInput: AnalysisTestInput!) {
-    analysis(input: $analysisTestInput) {
-      ok
-      error
-      mbti
-    }
-  }
-`;
 
 export default function Research({ match, location, history }) {
   const questions = TEST_PAPER;
-  const formSchema = Yup.object().shape({
-    decision: Yup.number()
-      .required("Selecting the decision field is required")
-      .oneOf([0, 1], "Must be one of 0, 1"),
-  });
-  const {
-    register,
-    getValues,
-    formState: { errors },
-    handleSubmit,
-    watch,
-  } = useForm({
-    mode: "onChange",
-    resolver: yupResolver(formSchema),
-  });
-  console.log(watch("J_P8"));
-
-  const onCompleted = (data) => {
-    const {
-      login: { ok, token },
-    } = data;
-    if (ok && token) {
-      history.push("/");
-    }
-  };
-
-  const [analysisTestMutation, { data, loading }] = useMutation(
-    ANALYSIS_TEST_MUTATION,
-    {
-      onCompleted,
-    }
-  );
-
-  const onSubmit = () => {
-    if (!loading) {
-      const { J_P8 } = getValues();
-      console.log(J_P8);
-      history.push("/");
-      analysisTestMutation({
-        variables: {
-          analysisTestInput: {
-            J_P8,
-          },
-        },
-      });
-    }
-  };
 
   return (
     <>
@@ -160,7 +102,7 @@ export default function Research({ match, location, history }) {
                     </div>
                     <h6 className="text-xl font-semibold">주의 사항 2</h6>
                     <p className="mt-2 mb-4 text-blueGray-500">
-                      중립은 지양하는 것이 좋습니다.
+                      반드시 모든 항목에 답변해주십시오.
                     </p>
                   </div>
                 </div>
@@ -183,13 +125,7 @@ export default function Research({ match, location, history }) {
           </div>
         </section>
         <section className="relative py-20">
-          <form
-            onSubmit={() => {
-              handleSubmit(onSubmit);
-            }}
-          >
-            <TestPaper question={questions}></TestPaper>
-          </form>
+          <TestPaper history question={questions}></TestPaper>
         </section>
         <section className="pt-20 pb-48">
           <div className="container mx-auto px-4">
