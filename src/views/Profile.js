@@ -41,7 +41,7 @@ const USER_PROFILE_QUERY = gql`
 
 export default function Profile({ match, history }) {
   const userId = +match.params.id;
-  let userInfo, meInfo;
+  let userInfo, meInfo, myResult, userList, variety;
   const { data: meData, loading: meLoading } = useMe();
   const { data: userData, loading: userLoading } = useQuery(
     USER_PROFILE_QUERY,
@@ -57,17 +57,20 @@ export default function Profile({ match, history }) {
     const { me } = meData;
     if (me) {
       meInfo = me;
-      userInfo = me;
     }
   }
-  if (!userLoading && +match.params.id !== 0) {
+  if (!userLoading) {
     const {
-      userProfile: { ok, error, user },
+      userProfile: { ok, error, user, myResult: mR, userList: uL },
     } = userData;
     if (ok) {
       userInfo = user;
+      myResult = mR;
+      userList = uL;
     }
     console.log(userInfo);
+    const myResultArr = myResult.map((mbti) => mbti.mbti);
+    variety = new Set(myResultArr);
   }
 
   return (
@@ -160,7 +163,9 @@ export default function Profile({ match, history }) {
                     <div className="flex justify-center py-4 lg:pt-4 pt-8">
                       <div className="mr-4 p-3 text-center">
                         <span className="text-xl font-bold block uppercase tracking-wide text-blueGray-600">
-                          22
+                          {!meLoading && !userLoading
+                            ? myResult.length
+                            : "Loading..."}
                         </span>
                         <span className="text-sm text-blueGray-400">
                           Researchers
@@ -168,7 +173,9 @@ export default function Profile({ match, history }) {
                       </div>
                       <div className="mr-4 p-3 text-center">
                         <span className="text-xl font-bold block uppercase tracking-wide text-blueGray-600">
-                          3
+                          {!meLoading && !userLoading
+                            ? variety.size
+                            : "Loading..."}
                         </span>
                         <span className="text-sm text-blueGray-400">
                           MBTI variety
@@ -176,10 +183,12 @@ export default function Profile({ match, history }) {
                       </div>
                       <div className="lg:mr-4 p-3 text-center">
                         <span className="text-xl font-bold block uppercase tracking-wide text-blueGray-600">
-                          89
+                          {!meLoading && !userLoading
+                            ? userList.length
+                            : "Loading..."}
                         </span>
                         <span className="text-sm text-blueGray-400">
-                          Comments
+                          My List
                         </span>
                       </div>
                     </div>

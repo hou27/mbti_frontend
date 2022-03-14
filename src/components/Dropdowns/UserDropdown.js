@@ -1,8 +1,11 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { createPopper } from "@popperjs/core";
+import { useMe } from "../../hooks/useMe";
+import { loggedInFlag } from "../../apollo";
 
 const UserDropdown = () => {
+  const { data, loading, error } = useMe();
   // dropdown props
   const [dropdownPopoverShow, setDropdownPopoverShow] = React.useState(false);
   const btnDropdownRef = React.createRef();
@@ -48,7 +51,13 @@ const UserDropdown = () => {
           className={
             "text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700"
           }
-          to="/profile/0"
+          to={
+            loggedInFlag()
+              ? loading
+                ? "Loading.."
+                : `/profile/${data?.me.id}`
+              : "/auth/login"
+          }
         >
           Profile
         </Link>
