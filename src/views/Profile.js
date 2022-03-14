@@ -25,28 +25,26 @@ const USER_PROFILE_QUERY = gql`
 `;
 
 export default function Profile({ match, history }) {
-  let userInfo;
+  const userId = +match.params.id;
+  let userInfo, meInfo;
   const { data: meData, loading: meLoading } = useMe();
   const { data: userData, loading: userLoading } = useQuery(
     USER_PROFILE_QUERY,
     {
       variables: {
-        userId: +match.params.id,
+        userId,
       },
     }
   );
   if (!meLoading && !meData) {
     history.push("/auth/login");
-  }
-  // console.log(meData.me.email);
-  // console.log(userData);
-  if (match.params.id === "0") {
-    if (!meLoading) {
-      const { me } = meData;
-      if (me) {
-        userInfo = me;
-      }
+  } else if (!meLoading) {
+    const { me } = meData;
+    if (me) {
+      meInfo = me;
     }
+  }
+  if (match.params.id === "0") {
   } else {
     if (!userLoading) {
       const {
@@ -119,10 +117,15 @@ export default function Profile({ match, history }) {
                         to={
                           !meLoading && !userLoading
                             ? match.params.id === "0" ||
-                              userInfo?.email === userData?.email
+                              meInfo?.email === userInfo?.email
                               ? "/admin/editprofile"
-                              : "/search"
-                            : "..."
+                              : {
+                                  pathname: `/research/${userId}`,
+                                  state: {
+                                    name: userInfo.name,
+                                  },
+                                }
+                            : "#"
                         }
                       >
                         <button
@@ -131,7 +134,7 @@ export default function Profile({ match, history }) {
                         >
                           {!meLoading && !userLoading
                             ? match.params.id === "0" ||
-                              userInfo?.email === userData?.email
+                              meInfo?.email === userInfo?.email
                               ? "프로필 편집"
                               : "검사하기"
                             : "Loading..."}

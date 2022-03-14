@@ -1,7 +1,7 @@
 import React from "react";
 import { createPopper } from "@popperjs/core";
 
-const NotificationDropdown = () => {
+const NotificationDropdown = ({ id }) => {
   // dropdown props
   const [dropdownPopoverShow, setDropdownPopoverShow] = React.useState(false);
   const btnDropdownRef = React.createRef();
@@ -36,13 +36,12 @@ const NotificationDropdown = () => {
         }
       >
         <a
-          href="#pablo"
+          href={`/profile/${id}`}
           className={
             "text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700"
           }
-          onClick={(e) => e.preventDefault()}
         >
-          Action
+          Profile
         </a>
         <a
           href="#pablo"
