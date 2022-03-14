@@ -16,6 +16,7 @@ import TestPaper from "../components/TestPaper/TestPaper.js";
 
 export default function Research({ match, location, history }) {
   const questions = TEST_PAPER;
+  const userId = +match.params.id;
 
   return (
     <>
@@ -125,7 +126,7 @@ export default function Research({ match, location, history }) {
           </div>
         </section>
         <section className="relative py-20">
-          <TestPaper history question={questions}></TestPaper>
+          <TestPaper history question={questions} id={userId}></TestPaper>
         </section>
         <section className="pt-20 pb-48">
           <div className="container mx-auto px-4">

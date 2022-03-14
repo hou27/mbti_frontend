@@ -1,38 +1,47 @@
-import { gql, useLazyQuery, useMutation } from "@apollo/client";
+import { gql, useMutation } from "@apollo/client";
 import React, { useEffect } from "react";
-import { Link } from "react-router-dom";
-
-import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm, FormProvider, useFormContext } from "react-hook-form";
-import * as Yup from "yup";
 
 import { FormError } from "../formError.js";
 import TestPaperR from "./TestPaperR.js";
 import TestPaperL from "./TestPaperL.js";
+import { useMe } from "../../hooks/useMe.js";
 
 const ANALYSIS_TEST_MUTATION = gql`
   mutation analysisTest($analysisTestInput: AnalysisTestInput!) {
-    analysis(input: $analysisTestInput) {
+    analysisTest(input: $analysisTestInput) {
       ok
       error
-      mbti
+      testResult {
+        mbti
+        user {
+          id
+          name
+        }
+        tester {
+          id
+          name
+        }
+      }
     }
   }
 `;
 
-export default function TestPaper({ question, history }) {
+export default function TestPaper({ question, history, id: userId }) {
   const methods = useForm({
     mode: "onChange",
   });
 
   const onCompleted = (data) => {
     const {
-      login: { ok, mbti },
+      login: { ok, testResult },
     } = data;
-    if (ok && mbti) {
-      history.push("/");
+    if (ok && testResult) {
+      console.log(testResult);
     }
   };
+
+  const { data: meData, loading: meLoading } = useMe();
 
   const [analysisTestMutation, { data, loading }] = useMutation(
     ANALYSIS_TEST_MUTATION,
@@ -44,13 +53,18 @@ export default function TestPaper({ question, history }) {
   const onSubmit = (e) => {
     e.preventDefault();
 
-    if (!loading) {
+    if (!loading && !meLoading) {
       const results = methods.getValues();
+      console.log(results);
+      const values = Object.values(results);
+      const sum = values.reduce((acc, cur) => (acc += cur), 0).toString();
 
       analysisTestMutation({
         variables: {
           analysisTestInput: {
-            results,
+            userId,
+            testerId: meData.me.id,
+            results: sum,
           },
         },
       });

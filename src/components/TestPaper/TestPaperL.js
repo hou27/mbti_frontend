@@ -1,11 +1,5 @@
-import { gql, useLazyQuery } from "@apollo/client";
 import React, { useEffect } from "react";
-import { Link } from "react-router-dom";
-
-import { yupResolver } from "@hookform/resolvers/yup";
 import { useFormContext } from "react-hook-form";
-import * as Yup from "yup";
-import { FormError } from "../formError.js";
 
 export default function TestPaperL({ question: q }) {
   const { register } = useFormContext();
