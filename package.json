@@ -31,6 +31,7 @@
     "yup": "^0.32.11"
   },
   "scripts": {
+    "prebuild": "npm run tailwind:build",
     "start": "react-scripts start",
     "start:dev": "cross-env NODE_ENV=development react-scripts start",
     "build": "react-scripts build && gulp licenses",
