@@ -33,6 +33,17 @@ const IndexDropdown = () => {
       >
         {loggedInFlag() ? (loading ? "Loading.." : data?.me.name) : "My Pages"}
       </a>
+      <img
+        alt="..."
+        src={require("assets/img/free-icon-down-arrow-748063.png").default}
+      />
+      <a
+        href="https://www.flaticon.com/kr/free-icons/-"
+        title="아래쪽 화살표 아이콘"
+        className="hidden"
+      >
+        아래쪽 화살표 아이콘 제작자: Freepik - Flaticon
+      </a>
       <div
         ref={popoverDropdownRef}
         className={
