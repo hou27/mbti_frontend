@@ -22,8 +22,7 @@ const SEARCH_USER = gql`
 `;
 
 export default function SearchUserResult({ name, color }) {
-  const [searchUserQuery, { loading, data, called }] =
-    useLazyQuery(SEARCH_USER);
+  const [searchUserQuery, { loading, data }] = useLazyQuery(SEARCH_USER);
 
   useEffect(() => {
     if (!loading) {
@@ -35,7 +34,7 @@ export default function SearchUserResult({ name, color }) {
         },
       });
     }
-  }, [name, searchUserQuery]);
+  }, [name, searchUserQuery, loading]);
   // console.log(loading, data, called);
   return (
     <tbody>

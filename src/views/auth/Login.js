@@ -1,7 +1,5 @@
-import { gql, useMutation } from "@apollo/client";
 import React from "react";
 import { useForm } from "react-hook-form";
-import { useHistory } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { jwtTokenVar, loggedInFlag } from "../../apollo";
 import { FormError } from "../../components/formError";

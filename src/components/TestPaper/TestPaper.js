@@ -1,8 +1,7 @@
 import { gql, useMutation } from "@apollo/client";
-import React, { useEffect } from "react";
-import { useForm, FormProvider, useFormContext } from "react-hook-form";
+import React from "react";
+import { useForm, FormProvider } from "react-hook-form";
 
-import { FormError } from "../formError.js";
 import TestPaperR from "./TestPaperR.js";
 import TestPaperL from "./TestPaperL.js";
 import { useMe } from "../../hooks/useMe.js";
@@ -51,7 +50,7 @@ export default function TestPaper({ name, question, id: userId }) {
 
   const { data: meData, loading: meLoading } = useMe();
 
-  const [analysisTestMutation, { data, loading }] = useMutation(
+  const [analysisTestMutation, { loading }] = useMutation(
     ANALYSIS_TEST_MUTATION,
     {
       onCompleted,

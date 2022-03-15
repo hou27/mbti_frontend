@@ -1,7 +1,6 @@
 import { gql, useMutation } from "@apollo/client";
 import React from "react";
 import { useForm } from "react-hook-form";
-import { useHistory } from "react-router-dom";
 import { FormError } from "../../components/formError";
 import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";

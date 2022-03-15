@@ -5,7 +5,7 @@ import { useMe } from "../../hooks/useMe";
 import { loggedInFlag } from "../../apollo";
 
 const IndexDropdown = () => {
-  const { data, loading, error } = useMe();
+  const { data, loading } = useMe();
 
   // dropdown props
   const [dropdownPopoverShow, setDropdownPopoverShow] = React.useState(false);

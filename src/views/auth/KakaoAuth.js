@@ -22,15 +22,6 @@ const CREATE_KAKAO_ACCOUNT_MUTATION = gql`
   }
 `;
 
-const FIND_ACCOUNT_BY_EMAIL_MUTATION = gql`
-  mutation findAccountByEmailMutation($findMyEmailInput: FindMyEmailInput!) {
-    findByEmail(input: $findMyEmailInput) {
-      ok
-      error
-    }
-  }
-`;
-
 export default function KakaoAuth({ location }) {
   // Init Kakao api
   // @ts-ignore
@@ -58,17 +49,10 @@ export default function KakaoAuth({ location }) {
 
   const [
     createKakaoAccountMutation,
-    { data: createKakaoAccountMutationResult, loading, error },
+    { data: createKakaoAccountMutationResult, loading },
   ] = useMutation(CREATE_KAKAO_ACCOUNT_MUTATION, {
     onCompleted,
   });
-
-  // const [
-  //   findAccountByEmailMutation,
-  //   { data: findAccountByEmailMutationResult, loading: loadAccount },
-  // ] = useMutation(FIND_ACCOUNT_BY_EMAIL_MUTATION, {
-  //   onCompleted,
-  // });
 
   const formSchema = Yup.object().shape({
     password: Yup.string()

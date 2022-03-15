@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 import IndexNavbar from "../components/Navbars/IndexNavbar.js";
 import Footer from "../components/Footers/Footer.js";
@@ -12,10 +12,6 @@ export default function Search({ color }) {
   const handleInput = (event) => {
     setSearchInput(event.target.value);
   };
-
-  // useEffect(() => {
-  // 	return searchInput.length > 0 ? handleSubmit(searchInput) : null;
-  // }, [searchInput]);
 
   return (
     <>

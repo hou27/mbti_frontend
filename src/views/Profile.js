@@ -61,7 +61,7 @@ export default function Profile({ match, history }) {
   }
   if (!userLoading) {
     const {
-      userProfile: { ok, error, user, myResult: mR, userList: uL },
+      userProfile: { ok, user, myResult: mR, userList: uL },
     } = userData;
     if (ok) {
       userInfo = user;

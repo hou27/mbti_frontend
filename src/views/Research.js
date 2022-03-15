@@ -6,11 +6,6 @@ import { Link } from "react-router-dom";
 import Navbar from "../components/Navbars/AuthNavbar.js";
 import Footer from "../components/Footers/Footer.js";
 
-import { yupResolver } from "@hookform/resolvers/yup";
-import { useForm } from "react-hook-form";
-
-import * as Yup from "yup";
-import { FormError } from "../components/formError.js";
 import { TEST_PAPER } from "../_mocks_/testPaper.js";
 import TestPaper from "../components/TestPaper/TestPaper.js";
 
