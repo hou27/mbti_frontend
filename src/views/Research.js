@@ -8,13 +8,14 @@ import Footer from "../components/Footers/Footer.js";
 
 import { TEST_PAPER } from "../_mocks_/testPaper.js";
 import TestPaper from "../components/TestPaper/TestPaper.js";
+import { useMe } from "../hooks/useMe.js";
 
 export default function Research({ match, location, history }) {
+  const { data, loading } = useMe();
   const questions = TEST_PAPER;
   const regResearch = /research/;
-  console.log(location);
   const userId = +match.params.id;
-  console.log(match);
+  if (!loading && userId === data.me.id) history.push(`/profile/${userId}`);
 
   return (
     <>

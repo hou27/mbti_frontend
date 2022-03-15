@@ -68,7 +68,6 @@ export default function Profile({ match, history }) {
       myResult = mR;
       userList = uL;
     }
-    console.log(userInfo);
     const myResultArr = myResult.map((mbti) => mbti.mbti);
     variety = new Set(myResultArr);
   }
