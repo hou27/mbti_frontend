@@ -30,6 +30,7 @@ export default function App() {
         {/* add routes without layouts */}
         <Route path="/search" exact component={Search} />
         <Route path="/research/:id" exact component={Research} />
+        <Route path="/result/:id" exact component={Research} />
         <Route path="/profile/:id" exact component={Profile} />
         <Route path="/" exact component={Index} />
         {/* add redirect for first page */}

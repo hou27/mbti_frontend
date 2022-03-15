@@ -53,9 +53,8 @@ export default function SearchUserResult({ name, color }) {
             <Link
               to={{
                 pathname: `/research/${item.id}`,
-                state: {
-                  name: item.name,
-                },
+                state: { name: item.name },
+                /*key: item.name,*/
               }}
             >
               <th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left flex items-center">

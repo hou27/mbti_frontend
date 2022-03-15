@@ -3,6 +3,24 @@ import { useFormContext } from "react-hook-form";
 
 export default function TestPaperL({ question: q }) {
   const { register } = useFormContext();
+  const val_1 = 0;
+  let val_2;
+  switch (q.type) {
+    case "E_I":
+      val_2 = 1000;
+      break;
+    case "S_N":
+      val_2 = 100;
+      break;
+    case "T_F":
+      val_2 = 10;
+      break;
+    case "J_P":
+      val_2 = 1;
+      break;
+    default:
+      return;
+  }
 
   return (
     <>
@@ -60,7 +78,7 @@ export default function TestPaperL({ question: q }) {
                         type="radio"
                         id={q.id}
                         name={`${q.type}${q.id}`}
-                        value="0"
+                        value={val_1}
                         className="bg-indigo-200 form-radio border-0 rounded text-blueGray-700 ml-1 mr-3 w-5 h-5 ease-linear transition-all duration-150"
                       />
                       <label htmlFor={q.id} className="mr-3">
@@ -71,7 +89,7 @@ export default function TestPaperL({ question: q }) {
                         type="radio"
                         id={q.id + 1}
                         name={`${q.type}${q.id}`}
-                        value="1"
+                        value={val_2}
                         className="bg-indigo-200 form-radio border-0 rounded text-blueGray-700 ml-1 mr-3 w-5 h-5 ease-linear transition-all duration-150"
                       />
                       <label htmlFor={q.id} className="mr-3">

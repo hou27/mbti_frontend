@@ -6,6 +6,7 @@ import { FormError } from "../formError.js";
 import TestPaperR from "./TestPaperR.js";
 import TestPaperL from "./TestPaperL.js";
 import { useMe } from "../../hooks/useMe.js";
+import { useHistory } from "react-router-dom";
 
 const ANALYSIS_TEST_MUTATION = gql`
   mutation analysisTest($analysisTestInput: AnalysisTestInput!) {
@@ -27,7 +28,8 @@ const ANALYSIS_TEST_MUTATION = gql`
   }
 `;
 
-export default function TestPaper({ question, history, id: userId }) {
+export default function TestPaper({ name, question, id: userId }) {
+  const history = useHistory();
   const methods = useForm({
     mode: "onChange",
   });
@@ -38,6 +40,10 @@ export default function TestPaper({ question, history, id: userId }) {
     } = data;
     if (ok && testResult) {
       console.log(testResult);
+      history.push({
+        pathname: `/result/${userId}`,
+        state: { name, testResult: testResult.mbti },
+      });
     } else if (error) {
       console.log(error);
     }
@@ -59,7 +65,9 @@ export default function TestPaper({ question, history, id: userId }) {
       const results = methods.getValues();
       console.log(results);
       const values = Object.values(results);
-      const sum = values.reduce((acc, cur) => (acc += cur), 0).toString();
+      console.log(values);
+      const sum = values.reduce((acc, cur) => (acc += +cur), 0).toString();
+      console.log(sum);
 
       analysisTestMutation({
         variables: {
