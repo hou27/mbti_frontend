@@ -13,7 +13,10 @@ export const jwtTokenVar = makeVar(token);
 export const loggedInFlag = makeVar(Boolean(token));
 
 const httpLink = createHttpLink({
-  uri: URI,
+  uri:
+    process.env.NODE_ENV === "production"
+      ? "https://mbti-others-backend.herokuapp.com/graphql"
+      : URI,
 });
 
 const authLink = setContext((_, { headers }) => {
