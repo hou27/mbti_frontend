@@ -11,7 +11,7 @@ import TestPaper from "../components/TestPaper/TestPaper.js";
 import { useMe } from "../hooks/useMe.js";
 
 export default function Research({ match, location, history }) {
-  const { data, loading } = useMe();
+  const { data, loading, error } = useMe();
   const questions = TEST_PAPER;
   const regResearch = /research/;
   const userId = +match.params.id;
