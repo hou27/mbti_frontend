@@ -37,7 +37,7 @@ export default function Research({ match, location, history }) {
           <div className="container relative mx-auto">
             <div className="items-center flex flex-wrap">
               <div className="w-full lg:w-6/12 px-4 ml-auto mr-auto text-center">
-                <Link to="/search">
+                <Link to={`/profile/${userId}`}>
                   <button
                     className="text-emerald-500 bg-transparent border border-solid border-emerald-500 hover:bg-emerald-500 hover:text-white active:bg-emerald-600 font-bold uppercase px-8 py-3 rounded outline-none focus:outline-none mr-1 mb-8 ease-linear transition-all duration-150"
                     type="button"

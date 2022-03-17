@@ -41,7 +41,12 @@ const USER_PROFILE_QUERY = gql`
 
 export default function Profile({ match, history }) {
   const userId = +match.params.id;
-  let userInfo, meInfo, myResult, userList, variety;
+  let userInfo,
+    meInfo,
+    myResult,
+    userList,
+    variety,
+    sortedMbti = [];
   const { data: meData, loading: meLoading } = useMe();
   const { data: userData, loading: userLoading } = useQuery(
     USER_PROFILE_QUERY,
@@ -51,6 +56,25 @@ export default function Profile({ match, history }) {
       },
     }
   );
+
+  function getSortedArr(array) {
+    const res = [];
+    const counts = array.reduce((acc, cur) => {
+      acc[cur] = (acc[cur] || 0) + 1;
+      return acc;
+    }, {});
+
+    for (let mbti in counts) {
+      res.push([mbti, counts[mbti]]);
+    }
+
+    res.sort((a, b) => {
+      return b[1] - a[1];
+    });
+
+    return res;
+  }
+
   if (!loggedInFlag()) {
     history.push("/auth/login");
   } else if (!meLoading) {
@@ -69,6 +93,7 @@ export default function Profile({ match, history }) {
       userList = uL;
     }
     const myResultArr = myResult.map((mbti) => mbti.mbti);
+    sortedMbti = getSortedArr(myResultArr);
     variety = new Set(myResultArr);
   }
 
@@ -200,17 +225,27 @@ export default function Profile({ match, history }) {
                         {userInfo?.name ? userInfo.name : "No Info"}
                       </h3>
                       <div className="text-sm leading-normal mt-0 mb-2 text-blueGray-400 font-bold uppercase">
-                        <i className="fas fa-map-marker-alt mr-2 text-lg text-blueGray-400"></i>{" "}
+                        <i className="fas fa-solid fa-cake-candles mr-2 text-lg text-blueGray-400"></i>{" "}
                         {userInfo?.birth ? userInfo.birth : "enter your birth"}
                       </div>
+                      <div className="mb-2 text-blueGray-600 mt-10">
+                        <i className="fas fa-solid fa-quote-right mr-2 text-lg text-blueGray-400"></i>
+                        {userInfo?.bio
+                          ? userInfo?.bio
+                          : "The highest percentage of MBTI is..."}
+                      </div>
+                      <h4 className="text-4xl font-semibold leading-normal text-blueGray-700 mb-2">
+                        {sortedMbti.length === 0 ? "Not yet" : sortedMbti[0][0]}
+                      </h4>
                       <div className="mb-2 text-blueGray-600 mt-10">
                         <i className="fas fa-briefcase mr-2 text-lg text-blueGray-400"></i>
                         {userInfo?.bio
                           ? userInfo?.bio
                           : "You can enter anything here."}
                       </div>
+
                       <div className="mb-2 text-blueGray-600">
-                        <i className="fas fa-university mr-2 text-lg text-blueGray-400"></i>
+                        <i className="fas fa-regular fa-envelope-open mr-2 text-lg text-blueGray-400"></i>
                         {userInfo?.email ? userInfo?.email : "No Info"}
                       </div>
                     </div>
