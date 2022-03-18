@@ -73,7 +73,7 @@ export default function SearchUserResult({ name, color }) {
               </th>
             </Link>
             <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-              $3,150 USD
+              {item.birth ? item.birth : "No Info"}
             </td>
             <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
               <i className="fas fa-circle text-red-500 mr-2"></i> delayed

@@ -5,39 +5,7 @@ import Footer from "../components/Footers/Footer.js";
 import { useMe } from "../hooks/useMe.js";
 import { gql, useQuery } from "@apollo/client";
 import { loggedInFlag } from "../apollo.js";
-
-const USER_PROFILE_QUERY = gql`
-  query userProfile($userId: Float!) {
-    userProfile(userId: $userId) {
-      ok
-      error
-      user {
-        id
-        name
-        profileImg
-        email
-        gender
-        verified
-        birth
-        bio
-      }
-      myResult {
-        mbti
-        tester {
-          id
-          name
-        }
-      }
-      userList {
-        mbti
-        user {
-          id
-          name
-        }
-      }
-    }
-  }
-`;
+import { useUserProfile } from "../hooks/useUserProfile.js";
 
 export default function Profile({ match, history }) {
   const userId = +match.params.id;
@@ -48,14 +16,7 @@ export default function Profile({ match, history }) {
     variety,
     sortedMbti = [];
   const { data: meData, loading: meLoading } = useMe();
-  const { data: userData, loading: userLoading } = useQuery(
-    USER_PROFILE_QUERY,
-    {
-      variables: {
-        userId,
-      },
-    }
-  );
+  const { data: userData, loading: userLoading } = useUserProfile(userId);
 
   function getSortedArr(array) {
     const res = [];

@@ -1,9 +1,37 @@
 import React from "react";
+import { useHistory } from "react-router-dom";
+import { loggedInFlag } from "../../apollo";
+import { useMe } from "../../hooks/useMe";
 
 // components
 
 export default function CardSettings() {
+  const history = useHistory();
   const [showModal, setShowModal] = React.useState(false);
+  const { data: meData, loading: meLoading } = useMe();
+  // const { data: userData, loading: userLoading } = useUserProfile(userId);
+
+  let meInfo;
+
+  if (!loggedInFlag()) {
+    history.push("/auth/login");
+  } else if (!meLoading) {
+    const { me } = meData;
+    if (me) {
+      meInfo = me;
+    }
+    // const {
+    //   userProfile: { ok, user },
+    // } = userData;
+    // if (me && ok) {
+    //   if (me.id !== user.id) {
+    //     history.push("/");
+    //   } else {
+    //     meInfo = me;
+    //     userInfo = user;
+    //   }
+    // }
+  }
 
   return (
     <>
@@ -88,7 +116,7 @@ export default function CardSettings() {
                   <input
                     type="text"
                     className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
-                    defaultValue="lucky.jesse"
+                    value={meInfo?.name ? meInfo.name : "Loading..."}
                   />
                 </div>
               </div>
@@ -103,7 +131,7 @@ export default function CardSettings() {
                   <input
                     type="email"
                     className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
-                    defaultValue="jesse@example.com"
+                    value={meInfo?.email ? meInfo.email : "Loading..."}
                     readOnly
                   />
                 </div>
@@ -114,27 +142,13 @@ export default function CardSettings() {
                     className="block uppercase text-blueGray-600 text-xs font-bold mb-2"
                     htmlFor="grid-password"
                   >
-                    First Name
+                    Birth
                   </label>
                   <input
                     type="text"
                     className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
-                    defaultValue="Lucky"
-                  />
-                </div>
-              </div>
-              <div className="w-full lg:w-6/12 px-4">
-                <div className="relative w-full mb-3">
-                  <label
-                    className="block uppercase text-blueGray-600 text-xs font-bold mb-2"
-                    htmlFor="grid-password"
-                  >
-                    Last Name
-                  </label>
-                  <input
-                    type="text"
-                    className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
-                    defaultValue="Jesse"
+                    defaultValue="EX) 03 / 27 -> 0327"
+                    value={meInfo?.birth ? meInfo.birth : null}
                   />
                 </div>
               </div>
@@ -143,21 +157,20 @@ export default function CardSettings() {
             <hr className="mt-6 border-b-1 border-blueGray-300" />
 
             <h6 className="text-blueGray-400 text-sm mt-3 mb-6 font-bold uppercase">
-              Contact Information
+              Password
             </h6>
             <div className="flex flex-wrap">
               <div className="w-full lg:w-12/12 px-4">
-                <div className="relative w-full mb-3">
+                <div className="relative w-1/2 mb-3">
                   <label
                     className="block uppercase text-blueGray-600 text-xs font-bold mb-2"
                     htmlFor="grid-password"
                   >
-                    Address
+                    Type your current password
                   </label>
                   <input
-                    type="text"
+                    type="password"
                     className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
-                    defaultValue="Bld Mihail Kogalniceanu, nr. 8 Bl 1, Sc 1, Ap 09"
                   />
                 </div>
               </div>
@@ -167,12 +180,11 @@ export default function CardSettings() {
                     className="block uppercase text-blueGray-600 text-xs font-bold mb-2"
                     htmlFor="grid-password"
                   >
-                    City
+                    New Password
                   </label>
                   <input
-                    type="email"
+                    type="password"
                     className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
-                    defaultValue="New York"
                   />
                 </div>
               </div>
@@ -182,27 +194,11 @@ export default function CardSettings() {
                     className="block uppercase text-blueGray-600 text-xs font-bold mb-2"
                     htmlFor="grid-password"
                   >
-                    Country
+                    Check Password
                   </label>
                   <input
-                    type="text"
+                    type="password"
                     className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
-                    defaultValue="United States"
-                  />
-                </div>
-              </div>
-              <div className="w-full lg:w-4/12 px-4">
-                <div className="relative w-full mb-3">
-                  <label
-                    className="block uppercase text-blueGray-600 text-xs font-bold mb-2"
-                    htmlFor="grid-password"
-                  >
-                    Postal Code
-                  </label>
-                  <input
-                    type="text"
-                    className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
-                    defaultValue="Postal Code"
                   />
                 </div>
               </div>
@@ -227,6 +223,9 @@ export default function CardSettings() {
                     className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
                     defaultValue="A beautiful UI Kit and Admin for React & Tailwind CSS. It is Free and Open Source."
                     rows="4"
+                    value={
+                      meInfo?.bio ? meInfo?.bio : "You can enter anything here."
+                    }
                   ></textarea>
                 </div>
               </div>
