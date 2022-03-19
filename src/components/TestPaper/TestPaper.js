@@ -22,12 +22,13 @@ const ANALYSIS_TEST_MUTATION = gql`
           id
           name
         }
+        nonMemberNickname
       }
     }
   }
 `;
 
-export default function TestPaper({ name, question, id: userId }) {
+export default function TestPaper({ question, id: userId, nickname }) {
   const history = useHistory();
   const methods = useForm({
     mode: "onChange",
@@ -41,7 +42,7 @@ export default function TestPaper({ name, question, id: userId }) {
       console.log(testResult);
       history.push({
         pathname: `/result/${userId}`,
-        state: { name, testResult: testResult.mbti },
+        state: { testResult: testResult.mbti },
       });
     } else if (error) {
       console.log(error);
@@ -62,24 +63,28 @@ export default function TestPaper({ name, question, id: userId }) {
 
     if (!loading && !meLoading) {
       const results = methods.getValues();
-      console.log(results);
       const values = Object.values(results);
-      console.log(values);
       const sum = values.reduce((acc, cur) => (acc += +cur), 0).toString();
-      console.log(sum);
-
-      analysisTestMutation({
-        variables: {
-          analysisTestInput: {
+      const context = meData?.me
+        ? {
             userId,
             testerId: meData.me.id,
             results: sum,
-          },
+          }
+        : {
+            userId,
+            nonMemberNickname: nickname,
+            results: sum,
+          };
+
+      analysisTestMutation({
+        variables: {
+          analysisTestInput: context,
         },
       });
     }
   };
-
+  console.log(nickname);
   return (
     <FormProvider {...methods}>
       <form onSubmit={onSubmit}>

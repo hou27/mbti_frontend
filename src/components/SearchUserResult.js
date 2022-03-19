@@ -23,7 +23,7 @@ const SEARCH_USER = gql`
 
 export default function SearchUserResult({ name, color }) {
   const [searchUserQuery, { loading, data }] = useLazyQuery(SEARCH_USER);
-
+  let sortedData;
   useEffect(() => {
     if (!loading) {
       searchUserQuery({
@@ -35,6 +35,21 @@ export default function SearchUserResult({ name, color }) {
       });
     }
   }, [name, searchUserQuery, loading]);
+
+  if (!loading && data) {
+    let userArr = data.searchUser.users.map((user) => user);
+    sortedData = userArr.sort(function (a, b) {
+      let x = a.name.toLowerCase();
+      let y = b.name.toLowerCase();
+      if (x < y) {
+        return -1;
+      }
+      if (x > y) {
+        return 1;
+      }
+      return 0;
+    });
+  }
   // console.log(loading, data, called);
   return (
     <tbody>
@@ -46,8 +61,8 @@ export default function SearchUserResult({ name, color }) {
             </span>
           </th>
         </tr>
-      ) : data?.searchUser?.users ? (
-        data?.searchUser.users?.map((item, index) => (
+      ) : sortedData ? (
+        sortedData.map((item, index) => (
           <tr key={item.id}>
             <Link
               to={{

@@ -21,6 +21,7 @@ const USER_PROFILE_QUERY = gql`
           id
           name
         }
+        nonMemberNickname
       }
       userList {
         mbti
@@ -28,6 +29,7 @@ const USER_PROFILE_QUERY = gql`
           id
           name
         }
+        nonMemberNickname
       }
     }
   }

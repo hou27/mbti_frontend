@@ -153,9 +153,9 @@ export default function Research({ match, location, history }) {
             <section className="relative py-20">
               {isLoggedIn ? (
                 <TestPaper
-                  name={location?.state?.name}
                   question={questions}
                   id={userId}
+                  nickname={nickname}
                 ></TestPaper>
               ) : (
                 <>
