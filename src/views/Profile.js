@@ -191,19 +191,12 @@ export default function Profile({ match, history }) {
                       </div>
                       <div className="mb-2 text-blueGray-600 mt-10">
                         <i className="fas fa-solid fa-quote-right mr-2 text-lg text-blueGray-400"></i>
-                        {userInfo?.bio
-                          ? userInfo?.bio
-                          : "The highest percentage of MBTI is..."}
+                        The highest percentage of MBTI is...
                       </div>
                       <h4 className="text-4xl font-semibold leading-normal text-blueGray-700 mb-2">
                         {sortedMbti.length === 0 ? "Not yet" : sortedMbti[0][0]}
                       </h4>
-                      <div className="mb-2 text-blueGray-600 mt-10">
-                        <i className="fas fa-briefcase mr-2 text-lg text-blueGray-400"></i>
-                        {userInfo?.bio
-                          ? userInfo?.bio
-                          : "You can enter anything here."}
-                      </div>
+                      <br />
 
                       <div className="mb-2 text-blueGray-600">
                         <i className="fas fa-regular fa-envelope-open mr-2 text-lg text-blueGray-400"></i>

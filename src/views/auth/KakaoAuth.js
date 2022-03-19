@@ -57,7 +57,7 @@ export default function KakaoAuth({ location }) {
   const formSchema = Yup.object().shape({
     password: Yup.string()
       .required("Password is mendatory")
-      .min(3, "Password must be at 3 char long"),
+      .min(5, "Password must be at 5 char long"),
     confirmPassword: Yup.string()
       .required("Please type your password one more time.")
       .oneOf([Yup.ref("password")], "Passwords does not match"),
