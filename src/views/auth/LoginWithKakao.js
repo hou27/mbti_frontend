@@ -2,7 +2,6 @@
 import React, { useEffect } from "react";
 import axios from "axios";
 import qs from "qs";
-import queryString from "query-string";
 
 import { FormError } from "../../components/formError";
 import { useForm } from "react-hook-form";
@@ -62,7 +61,6 @@ export default function KakaoLogin({ location, history }) {
 
   useEffect(() => {
     /** get user info */
-
     async function getToken() {
       const { code } = qs.parse(location.search, {
         ignoreQueryPrefix: true,
@@ -75,11 +73,7 @@ export default function KakaoLogin({ location, history }) {
         client_secret: process.env.REACT_APP_CLIENT_SECRET,
       };
       const kakaoData = await axios
-        .post(
-          `https://kauth.kakao.com/oauth/token?${queryString.stringify(
-            formData
-          )}`
-        )
+        .post(`https://kauth.kakao.com/oauth/token?${qs.stringify(formData)}`)
         .then((res) => {
           return res;
         });
