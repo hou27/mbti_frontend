@@ -1,7 +1,7 @@
 {
   "name": "mbti_frontend",
   "version": "0.1.0",
-  "description": "Frontend of MBTI others.",
+  "description": "Frontend of MBTI Others.",
   "repository": "https://github.com/hou27/mbti_frontend",
   "license": "MIT",
   "dependencies": {

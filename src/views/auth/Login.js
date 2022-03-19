@@ -23,7 +23,8 @@ export default function Login({ history }) {
       localStorage.setItem(LOCALSTORAGE_TOKEN, token);
       jwtTokenVar(token);
       loggedInFlag(true);
-      history.push("/");
+      // history.push("/");
+      history.back();
     }
   };
 

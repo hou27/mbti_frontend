@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import Navbar from "../components/Navbars/AuthNavbar.js";
 import Footer from "../components/Footers/Footer.js";
 import { useMe } from "../hooks/useMe.js";
-import { gql, useQuery } from "@apollo/client";
 import { loggedInFlag } from "../apollo.js";
 import { useUserProfile } from "../hooks/useUserProfile.js";
 

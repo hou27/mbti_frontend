@@ -66,8 +66,6 @@ export default function CardSettings() {
     register,
     getValues,
     formState: { errors },
-    handleSubmit,
-    watch,
   } = useForm({
     mode: "onChange",
     resolver: yupResolver(formSchema),
@@ -77,8 +75,7 @@ export default function CardSettings() {
 
     console.log("a");
     if (!editLoading) {
-      const { name, oldPassword, newPassword, confirmPassword, birth, bio } =
-        getValues();
+      const { name, oldPassword, newPassword, birth, bio } = getValues();
       editProfileMutation({
         variables: {
           editProfileInput: {
