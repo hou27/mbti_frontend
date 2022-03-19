@@ -11,15 +11,19 @@ import TestPaper from "../components/TestPaper/TestPaper.js";
 import { useMe } from "../hooks/useMe.js";
 import { loggedInFlag } from "../apollo.js";
 import Login from "./auth/Login.js";
+import { useUserProfile } from "../hooks/useUserProfile.js";
 
 export default function Research({ match, location, history }) {
   const [nickname, setNickname] = useState("");
   const [isLoggedIn, setIsLoggedIn] = useState(loggedInFlag());
   const { data, loading, error } = useMe();
+  const { data: userProfileData, loading: userProfileLoading } = useUserProfile(
+    +match.params.id
+  );
   const questions = TEST_PAPER;
   const regResearch = /research/;
   const userId = +match.params.id;
-
+  if (!userProfileLoading) console.log(userProfileData);
   if (!loading && userId === data?.me.id) history.push(`/profile/${userId}`);
 
   console.log(nickname, isLoggedIn);
@@ -48,7 +52,9 @@ export default function Research({ match, location, history }) {
                     className="text-emerald-500 bg-transparent border border-solid border-emerald-500 hover:bg-emerald-500 hover:text-white active:bg-emerald-600 font-bold uppercase px-8 py-3 rounded outline-none focus:outline-none mr-1 mb-8 ease-linear transition-all duration-150"
                     type="button"
                   >
-                    {location?.state?.name ? location?.state?.name : "nonamed"}
+                    {userProfileData?.userProfile?.user.name
+                      ? userProfileData?.userProfile?.user.name
+                      : "nonamed"}
                   </button>
                 </Link>
                 {regResearch.test(match.path) ? (
@@ -154,7 +160,7 @@ export default function Research({ match, location, history }) {
               ) : (
                 <>
                   <div className="w-full px-4">
-                    <Login history></Login>
+                    <Login history userId={match.params.id}></Login>
                   </div>
                   <h1 className="flex content-center items-center justify-center ml-3 mb-8 font-medium text-xl tracking-wide">
                     O R

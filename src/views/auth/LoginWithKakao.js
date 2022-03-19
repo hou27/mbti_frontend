@@ -6,7 +6,7 @@ import qs from "qs";
 import { FormError } from "../../components/formError";
 import { useForm } from "react-hook-form";
 import { useLogin } from "../../hooks/useLogin";
-import { LOCALSTORAGE_TOKEN } from "../../localToken";
+import { LOCALSTORAGE_TESTPAGEID, LOCALSTORAGE_TOKEN } from "../../localKey";
 import { jwtTokenVar, loggedInFlag } from "../../apollo";
 import { Link } from "react-router-dom";
 import { useFindByEmail } from "../../hooks/useFindByEmail";
@@ -40,7 +40,11 @@ export default function KakaoLogin({ location, history }) {
       localStorage.setItem(LOCALSTORAGE_TOKEN, token);
       jwtTokenVar(token);
       loggedInFlag(true);
-      history.push("/");
+      if (localStorage.getItem(LOCALSTORAGE_TESTPAGEID)) {
+        const testpageId = localStorage.getItem(LOCALSTORAGE_TESTPAGEID);
+        localStorage.removeItem(LOCALSTORAGE_TESTPAGEID);
+        history.push(`/research/${testpageId}`);
+      } else history.push("/");
     }
   };
 

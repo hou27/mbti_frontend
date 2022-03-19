@@ -122,9 +122,9 @@ export default function Profile({ match, history }) {
                               ? "/admin/editprofile"
                               : {
                                   pathname: `/research/${userId}`,
-                                  state: {
+                                  /*state: {
                                     name: userInfo.name,
-                                  },
+                                  },*/
                                 }
                             : "#"
                         }

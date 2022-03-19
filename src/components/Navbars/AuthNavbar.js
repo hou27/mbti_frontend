@@ -2,7 +2,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { loggedInFlag } from "../../apollo";
-import { LOCALSTORAGE_TOKEN } from "../../localToken";
+import { LOCALSTORAGE_TOKEN } from "../../localKey";
 import PagesDropdown from "../Dropdowns/PagesDropdown";
 
 // components

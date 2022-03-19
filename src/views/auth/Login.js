@@ -4,9 +4,9 @@ import { Link } from "react-router-dom";
 import { jwtTokenVar, loggedInFlag } from "../../apollo";
 import { FormError } from "../../components/formError";
 import { useLogin } from "../../hooks/useLogin";
-import { LOCALSTORAGE_TOKEN } from "../../localToken";
+import { LOCALSTORAGE_TESTPAGEID, LOCALSTORAGE_TOKEN } from "../../localKey";
 
-export default function Login({ history }) {
+export default function Login({ history, userId }) {
   const {
     register,
     getValues,
@@ -24,7 +24,10 @@ export default function Login({ history }) {
       jwtTokenVar(token);
       loggedInFlag(true);
       // history.push("/");
-      history.back();
+      if (localStorage.getItem(LOCALSTORAGE_TESTPAGEID)) {
+        localStorage.removeItem(LOCALSTORAGE_TESTPAGEID);
+        history.push(`/research/${userId}`);
+      } else history.back();
     }
   };
 
@@ -44,6 +47,10 @@ export default function Login({ history }) {
       });
     }
   };
+
+  if (userId) {
+    localStorage.setItem(LOCALSTORAGE_TESTPAGEID, userId);
+  }
 
   return (
     <>

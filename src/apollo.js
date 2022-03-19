@@ -5,13 +5,12 @@ import {
   makeVar,
 } from "@apollo/client";
 import { setContext } from "@apollo/client/link/context";
-import { LOCALSTORAGE_TOKEN } from "./localToken";
+import { LOCALSTORAGE_TOKEN } from "./localKey";
 
 const URI = "http://192.168.219.100:4000/graphql";
 const token = localStorage.getItem(LOCALSTORAGE_TOKEN);
 export const jwtTokenVar = makeVar(token);
 export const loggedInFlag = makeVar(Boolean(token));
-export const testPageId = makeVar("");
 
 const httpLink = createHttpLink({
   uri:
@@ -44,11 +43,6 @@ export const client = new ApolloClient({
           token: {
             read() {
               return jwtTokenVar();
-            },
-          },
-          testPageId: {
-            read() {
-              return testPageId();
             },
           },
         },
