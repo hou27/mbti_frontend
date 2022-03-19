@@ -151,7 +151,7 @@ export default function Research({ match, location, history }) {
               </div>
             </section>
             <section className="relative py-20">
-              {isLoggedIn ? (
+              {isLoggedIn || loggedInFlag() ? (
                 <TestPaper
                   question={questions}
                   id={userId}
@@ -160,7 +160,7 @@ export default function Research({ match, location, history }) {
               ) : (
                 <>
                   <div className="w-full px-4">
-                    <Login history userId={match.params.id}></Login>
+                    <Login userId={match.params.id}></Login>
                   </div>
                   <h1 className="flex content-center items-center justify-center ml-3 mb-8 font-medium text-xl tracking-wide">
                     O R

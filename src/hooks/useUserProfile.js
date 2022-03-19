@@ -17,19 +17,9 @@ const USER_PROFILE_QUERY = gql`
       }
       myResult {
         mbti
-        tester {
-          id
-          name
-        }
-        nonMemberNickname
       }
       userList {
         mbti
-        user {
-          id
-          name
-        }
-        nonMemberNickname
       }
     }
   }

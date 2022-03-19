@@ -12,18 +12,16 @@ const ANALYSIS_TEST_MUTATION = gql`
     analysisTest(input: $analysisTestInput) {
       ok
       error
-      testResult {
-        mbti
-        user {
-          id
-          name
-        }
-        tester {
-          id
-          name
-        }
-        nonMemberNickname
+      mbti
+      user {
+        id
+        name
       }
+      tester {
+        id
+        name
+      }
+      nonMemberNickname
     }
   }
 `;
@@ -36,13 +34,12 @@ export default function TestPaper({ question, id: userId, nickname }) {
 
   const onCompleted = (data) => {
     const {
-      analysisTest: { ok, error, testResult },
+      analysisTest: { ok, error, mbti },
     } = data;
-    if (ok && testResult) {
-      console.log(testResult);
+    if (ok && mbti) {
       history.push({
         pathname: `/result/${userId}`,
-        state: { testResult: testResult.mbti },
+        state: { testResult: mbti },
       });
     } else if (error) {
       console.log(error);
