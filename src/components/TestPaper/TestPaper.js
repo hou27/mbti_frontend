@@ -81,7 +81,6 @@ export default function TestPaper({ question, id: userId, nickname }) {
       });
     }
   };
-  console.log(nickname);
   return (
     <FormProvider {...methods}>
       <form onSubmit={onSubmit}>

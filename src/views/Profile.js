@@ -5,6 +5,7 @@ import Footer from "../components/Footers/Footer.js";
 import { useMe } from "../hooks/useMe.js";
 import { loggedInFlag } from "../apollo.js";
 import { useUserProfile } from "../hooks/useUserProfile.js";
+import getSortedMbti from "../utils/getSortedMbti.js";
 
 export default function Profile({ match, history }) {
   const userId = +match.params.id;
@@ -16,24 +17,6 @@ export default function Profile({ match, history }) {
     sortedMbti = [];
   const { data: meData, loading: meLoading } = useMe();
   const { data: userData, loading: userLoading } = useUserProfile(userId);
-
-  function getSortedArr(array) {
-    const res = [];
-    const counts = array.reduce((acc, cur) => {
-      acc[cur] = (acc[cur] || 0) + 1;
-      return acc;
-    }, {});
-
-    for (let mbti in counts) {
-      res.push([mbti, counts[mbti]]);
-    }
-
-    res.sort((a, b) => {
-      return b[1] - a[1];
-    });
-
-    return res;
-  }
 
   if (!loggedInFlag()) {
     history.push("/auth/login");
@@ -53,7 +36,7 @@ export default function Profile({ match, history }) {
       userList = uL;
     }
     const myResultArr = myResult.map((mbti) => mbti.mbti);
-    sortedMbti = getSortedArr(myResultArr);
+    sortedMbti = getSortedMbti(myResultArr);
     variety = new Set(myResultArr);
   }
 

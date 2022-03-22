@@ -86,7 +86,7 @@ export default function Search({ color }) {
                           : "bg-lightBlue-800 text-lightBlue-300 border-lightBlue-700")
                       }
                     >
-                      locate
+                      Top percentage
                     </th>
                     <th
                       className={
@@ -96,7 +96,7 @@ export default function Search({ color }) {
                           : "bg-lightBlue-800 text-lightBlue-300 border-lightBlue-700")
                       }
                     >
-                      Users
+                      Researchers
                     </th>
                     <th
                       className={

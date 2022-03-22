@@ -1,6 +1,7 @@
 import { gql, useLazyQuery } from "@apollo/client";
 import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
+import getSortedMbti from "../utils/getSortedMbti";
 import TableDropdown from "./Dropdowns/TableDropdown";
 
 const SEARCH_USER = gql`
@@ -12,10 +13,15 @@ const SEARCH_USER = gql`
         id
         name
         profileImg
-        email
         gender
         birth
         bio
+        myResult {
+          mbti
+        }
+        userList {
+          mbti
+        }
       }
     }
   }
@@ -23,7 +29,7 @@ const SEARCH_USER = gql`
 
 export default function SearchUserResult({ name, color }) {
   const [searchUserQuery, { loading, data }] = useLazyQuery(SEARCH_USER);
-  let sortedData;
+  let sortedData, sortedMbti;
   useEffect(() => {
     if (!loading) {
       searchUserQuery({
@@ -49,6 +55,12 @@ export default function SearchUserResult({ name, color }) {
       }
       return 0;
     });
+
+    const mbtiArr = sortedData.map((item) =>
+      item.myResult.map((mbti) => mbti.mbti)
+    );
+    sortedMbti = mbtiArr.map((item) => getSortedMbti(item));
+    console.log(sortedMbti);
   }
   // console.log(loading, data, called);
   return (
@@ -67,8 +79,6 @@ export default function SearchUserResult({ name, color }) {
             <Link
               to={{
                 pathname: `/research/${item.id}`,
-                state: { name: item.name },
-                /*key: item.name,*/
               }}
             >
               <th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left flex items-center">
@@ -91,7 +101,10 @@ export default function SearchUserResult({ name, color }) {
               {item.birth ? item.birth : "No Info"}
             </td>
             <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-              <i className="fas fa-circle text-red-500 mr-2"></i> delayed
+              <i className="fas fa-circle text-green-500 mr-2"></i>{" "}
+              {sortedMbti[index].length > 0
+                ? sortedMbti[index][0][0]
+                : "Not yet"}
             </td>
             <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
               <div className="flex">

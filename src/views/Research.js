@@ -26,7 +26,6 @@ export default function Research({ match, location, history }) {
   if (!userProfileLoading) console.log(userProfileData);
   if (!loading && userId === data?.me.id) history.push(`/profile/${userId}`);
 
-  console.log(nickname, isLoggedIn);
   return (
     <>
       <Navbar transparent />
