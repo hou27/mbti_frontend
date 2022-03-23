@@ -25,10 +25,10 @@ export default function Login({ userId }) {
       localStorage.setItem(LOCALSTORAGE_TOKEN, token);
       jwtTokenVar(token);
       loggedInFlag(true);
-      // history.push("/");
+
       if (localStorage.getItem(LOCALSTORAGE_TESTPAGEID)) {
         localStorage.removeItem(LOCALSTORAGE_TESTPAGEID);
-      } else history.goBack();
+      } else history.push("/"); //history.goBack();
     }
   };
 
