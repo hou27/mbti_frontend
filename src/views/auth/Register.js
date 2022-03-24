@@ -84,28 +84,14 @@ export default function Register({ history }) {
               <div className="rounded-t mb-0 px-6 py-6">
                 <div className="text-center mb-3">
                   <h6 className="text-blueGray-500 text-sm font-bold">
-                    Sign up with
+                    Sign up with Credentials
                   </h6>
-                </div>
-                <div className="btn-wrapper text-center">
-                  <a
-                    href={`https://kauth.kakao.com/oauth/authorize?client_id=${process.env.REACT_APP_KAKAO_REST_API_KEY}&redirect_uri=${process.env.REACT_APP_REDIRECT_URI_AUTH}&response_type=code`}
-                    className="mr-2 mb-1 shadow hover:shadow-md inline-flex items-center font-bold text-xs ease-linear transition-all duration-150"
-                  >
-                    <img
-                      alt="..."
-                      src={
-                        require("assets/img/kakao_login_medium_narrow.png")
-                          .default
-                      }
-                    />
-                  </a>
                 </div>
                 <hr className="mt-6 border-b-1 border-blueGray-300" />
               </div>
               <div className="flex-auto px-4 lg:px-10 py-10 pt-0">
                 <div className="text-blueGray-400 text-center mb-3 font-bold">
-                  <small>Or sign up with credentials</small>
+                  <small>MBTI Others</small>
                 </div>
                 <form onSubmit={handleSubmit(onSubmit)}>
                   <div className="relative w-full mb-3">
