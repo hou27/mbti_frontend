@@ -17,22 +17,22 @@ export default function Search({ color }) {
   return (
     <>
       <IndexNavbar fixed />
-      <section className="header relative pt-16 items-center flex h-screen max-h-860-px">
-        <div className="w-full mx-autp items-center flex-col justify-center md:flex-nowrap flex-wrap md:px-10 px-4">
-          <div className=" items-center ml-auto mb-3">
-            <div className="relative flex w-full flex-wrap items-stretch">
-              <span className="z-10 h-full leading-snug font-normal absolute text-center text-blueGray-300 bg-transparent rounded text-base items-center justify-center w-8 pl-3 py-3">
-                <i className="fas fa-search"></i>
-              </span>
-              <input
-                value={searchInput}
-                onChange={handleInput}
-                type="text"
-                placeholder="Search here..."
-                className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 relative bg-white rounded text-sm shadow outline-none focus:outline-none focus:ring w-full pl-10"
-              />
-            </div>
+      <section className="header relative pt-24 items-center h-screen max-h-860-px">
+        <div className="w-full mb-6 mx-auto items-center flex-col justify-center md:flex-nowrap flex-wrap md:px-10 px-4">
+          <div className="relative flex w-full flex-wrap items-stretch">
+            <span className="z-10 h-full leading-snug font-normal absolute text-center text-blueGray-300 bg-transparent rounded text-base items-center justify-center w-8 pl-3 py-3">
+              <i className="fas fa-search"></i>
+            </span>
+            <input
+              value={searchInput}
+              onChange={handleInput}
+              type="text"
+              placeholder="Search here..."
+              className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 relative bg-white rounded text-sm shadow outline-none focus:outline-none focus:ring w-full pl-10"
+            />
           </div>
+        </div>
+        <div className="w-full mx-auto items-center flex-col justify-center md:flex-nowrap flex-wrap md:px-10 px-4">
           <div
             className={
               "relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded " +
