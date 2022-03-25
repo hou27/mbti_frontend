@@ -1,17 +1,11 @@
 // @ts-ignore
 import React, { useEffect } from "react";
 import { gql, useMutation } from "@apollo/client";
-import axios from "axios";
-import * as Yup from "yup";
-import qs from "qs";
-import queryString from "query-string";
-
 import { useHistory } from "react-router-dom";
 import { FormError } from "../../components/formError";
-import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
 import { LOCALSTORAGE_TESTPAGEID, LOCALSTORAGE_TOKEN } from "../../localKey";
 import { jwtTokenVar, loggedInFlag } from "../../apollo";
+import qs from "qs";
 
 const LOGIN_WITH_KAKAO_MUTATION = gql`
   mutation loginWithKakao($loginWithKakaoInput: LoginWithKakaoInput!) {
@@ -78,7 +72,7 @@ export default function KakaoLogin({ location }) {
     }
 
     kakaoLogin();
-  }, [location, loginWithKakaoMutation]);
+  }, [location, loginWithKakaoMutation, loading]);
 
   return (
     <>

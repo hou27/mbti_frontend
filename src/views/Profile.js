@@ -105,9 +105,6 @@ export default function Profile({ match, history }) {
                               ? "/admin/editprofile"
                               : {
                                   pathname: `/research/${userId}`,
-                                  /*state: {
-                                    name: userInfo.name,
-                                  },*/
                                 }
                             : "#"
                         }

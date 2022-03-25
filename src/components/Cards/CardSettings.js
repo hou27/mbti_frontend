@@ -73,7 +73,6 @@ export default function CardSettings() {
   const onSubmit = (e) => {
     e.preventDefault();
 
-    console.log("a");
     if (!editLoading) {
       const { name, oldPassword, newPassword, birth, bio } = getValues();
       editProfileMutation({
