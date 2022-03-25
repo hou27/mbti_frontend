@@ -17,7 +17,7 @@ export default function Search({ color }) {
   return (
     <>
       <IndexNavbar fixed />
-      <section className="header relative pt-24 items-center h-screen max-h-860-px">
+      <section className="header relative pt-24 items-center h-screen overflow-x-auto overflow-y-auto">
         <div className="w-full mb-6 mx-auto items-center flex-col justify-center md:flex-nowrap flex-wrap md:px-10 px-4">
           <div className="relative flex w-full flex-wrap items-stretch">
             <span className="z-10 h-full leading-snug font-normal absolute text-center text-blueGray-300 bg-transparent rounded text-base items-center justify-center w-8 pl-3 py-3">
@@ -53,7 +53,7 @@ export default function Search({ color }) {
                 </div>
               </div>
             </div>
-            <div className="block w-full overflow-x-auto">
+            <div className="block w-full overflow-x-auto overflow-y-auto">
               {/* Projects table */}
               <table className="items-center w-full bg-transparent border-collapse">
                 <thead>
