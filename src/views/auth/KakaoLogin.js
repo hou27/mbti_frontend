@@ -74,7 +74,7 @@ export default function KakaoLogin({ location }) {
 
       kakaoLogin();
     }
-  }, [location, loginWithKakaoMutation, loading]);
+  }, [location, loginWithKakaoMutation, loginWithKakaoMutationResult, loading]);
 
   return (
     <>
