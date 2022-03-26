@@ -1,11 +1,15 @@
 /*eslint-disable*/
-import React from "react";
+import React, { useRef } from "react";
 import { Link } from "react-router-dom";
 
 import IndexNavbar from "../components/Navbars/IndexNavbar";
 import Footer from "../components/Footers/Footer";
 
 export default function Index() {
+  const instructionRef = useRef(null);
+  const onInstructionClick = () => {
+    instructionRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
   return (
     <>
       <IndexNavbar fixed />
@@ -34,12 +38,12 @@ export default function Index() {
                 >
                   Get started
                 </Link>
-                <Link
-                  to="/instruction"
+                <button
                   className="github-star ml-1 text-white font-bold px-6 py-4 rounded outline-none focus:outline-none mr-1 mb-1 bg-blueGray-700 active:bg-blueGray-600 text-sm shadow hover:shadow-lg ease-linear transition-all duration-150"
+                  onClick={onInstructionClick}
                 >
                   How?
-                </Link>
+                </button>
               </div>
             </div>
           </div>
@@ -239,7 +243,10 @@ export default function Index() {
           </div>
         </div>
 
-        <div className="container mx-auto px-4 pb-32 pt-48">
+        <div
+          ref={instructionRef}
+          className="container mx-auto px-4 pb-32 pt-48"
+        >
           <div className="items-center flex flex-wrap">
             <div className="w-full md:w-5/12 ml-auto px-12 md:px-4">
               <div className="md:pr-12">
