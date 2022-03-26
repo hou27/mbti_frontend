@@ -49,29 +49,31 @@ export default function KakaoLogin({ location }) {
   });
 
   useEffect(() => {
-    async function getToken() {
-      const { code } = qs.parse(location.search, {
-        ignoreQueryPrefix: true,
-      });
-
-      return code;
-    }
-
-    async function kakaoLogin() {
-      const code = await getToken();
-
-      if (!loading) {
-        loginWithKakaoMutation({
-          variables: {
-            loginWithKakaoInput: {
-              code,
-            },
-          },
+    if (!loading) {
+      async function getToken() {
+        const { code } = qs.parse(location.search, {
+          ignoreQueryPrefix: true,
         });
-      }
-    }
 
-    kakaoLogin();
+        return code;
+      }
+
+      async function kakaoLogin() {
+        const code = await getToken();
+
+        if (!loginWithKakaoMutationResult) {
+          loginWithKakaoMutation({
+            variables: {
+              loginWithKakaoInput: {
+                code,
+              },
+            },
+          });
+        }
+      }
+
+      kakaoLogin();
+    }
   }, [location, loginWithKakaoMutation, loading]);
 
   return (
