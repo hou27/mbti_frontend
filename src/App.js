@@ -17,6 +17,7 @@ import Index from "./views/main";
 import Search from "./views/search";
 import { loggedInFlag } from "./apollo";
 import { useReactiveVar } from "@apollo/client";
+import Instruction from "./views/Instruction";
 
 export default function App() {
   useReactiveVar(loggedInFlag);
@@ -32,6 +33,7 @@ export default function App() {
         <Route path="/research/:id" exact component={Research} />
         <Route path="/result/:id" exact component={Research} />
         <Route path="/profile/:id" exact component={Profile} />
+        <Route path="/instruction" exact component={Instruction} />
         <Route path="/" exact component={Index} />
         {/* add redirect for first page */}
         <Redirect from="*" to="/" />

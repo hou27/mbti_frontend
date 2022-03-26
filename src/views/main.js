@@ -34,13 +34,12 @@ export default function Index() {
                 >
                   Get started
                 </Link>
-                <a
-                  href="https://github.com/hou27"
+                <Link
+                  to="/instruction"
                   className="github-star ml-1 text-white font-bold px-6 py-4 rounded outline-none focus:outline-none mr-1 mb-1 bg-blueGray-700 active:bg-blueGray-600 text-sm shadow hover:shadow-lg ease-linear transition-all duration-150"
-                  target="_blank"
                 >
-                  Developer Info
-                </a>
+                  How?
+                </Link>
               </div>
             </div>
           </div>

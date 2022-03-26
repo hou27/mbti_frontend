@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { createPopper } from "@popperjs/core";
 import { useMe } from "../../hooks/useMe";
 import { loggedInFlag } from "../../apollo";
+import { LOCALSTORAGE_TOKEN } from "../../localKey";
 
 const UserDropdown = () => {
   const { data, loading } = useMe();
@@ -86,7 +87,11 @@ const UserDropdown = () => {
           className={
             "text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700"
           }
-          onClick={(e) => e.preventDefault()}
+          onClick={(e) => {
+            e.preventDefault();
+            localStorage.removeItem(LOCALSTORAGE_TOKEN);
+            loggedInFlag(false);
+          }}
         >
           Log out
         </a>
