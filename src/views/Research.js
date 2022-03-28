@@ -23,7 +23,7 @@ export default function Research({ match, location, history }) {
   const questions = TEST_PAPER;
   const regResearch = /research/;
   const userId = +match.params.id;
-  if (!userProfileLoading) console.log(userProfileData);
+
   if (!loading && userId === data?.me.id) history.push(`/profile/${userId}`);
 
   return (
