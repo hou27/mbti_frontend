@@ -47,7 +47,7 @@ export default function TestPaperL({ question: q }) {
                   <div className="flex items-center">
                     <div>
                       <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full text-lightBlue-600 bg-lightBlue-200 mr-3">
-                        <i className="fas fa-fingerprint"></i>
+                        <i className="fa-solid fa-1"></i>
                       </span>
                     </div>
                     <div>
@@ -59,7 +59,7 @@ export default function TestPaperL({ question: q }) {
                   <div className="flex items-center">
                     <div>
                       <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full text-lightBlue-600 bg-lightBlue-200 mr-3">
-                        <i className="fab fa-html5"></i>
+                        <i className="fa-solid fa-2"></i>
                       </span>
                     </div>
                     <div>
