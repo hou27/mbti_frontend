@@ -40,9 +40,7 @@ export default function TestPaperL({ question: q }) {
               </div>
               <h3 className="text-3xl font-semibold">Check other's MBTI</h3>
               <p className="mt-4 text-lg leading-relaxed text-blueGray-500">
-                The extension comes with three pre-built pages to help you get
-                started faster. You can change the text and images and you're
-                good to go.
+                아 설레 너무 재밌다 다른 사람 MBTI 검사를 내가 하는 건 처음이야!
               </p>
               <ul className="list-none mt-6">
                 <li className="py-2">

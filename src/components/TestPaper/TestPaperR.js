@@ -33,16 +33,15 @@ export default function TestPaperR({ question: q }) {
               </div>
               <h3 className="text-3xl font-semibold">Let's check it out!</h3>
               <p className="mt-4 text-lg leading-relaxed text-blueGray-500">
-                The extension comes with three pre-built pages to help you get
-                started faster. You can change the text and images and you're
-                good to go.
+                진짜 재밌는데? 이거 하고 다른 친구들한테 링크 공유할까? 프로필
+                들어가면 공유할 수 있는 버튼이 있을 것 같아!
               </p>
               <ul className="list-none mt-6">
                 <li className="py-2">
                   <div className="flex items-center">
                     <div>
                       <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full text-lightBlue-600 bg-lightBlue-200 mr-3">
-                        <i className="fas fa-fingerprint"></i>
+                        <i className="fa-solid fa-1"></i>
                       </span>
                     </div>
                     <div>
@@ -54,7 +53,7 @@ export default function TestPaperR({ question: q }) {
                   <div className="flex items-center">
                     <div>
                       <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full text-lightBlue-600 bg-lightBlue-200 mr-3">
-                        <i className="fab fa-html5"></i>
+                        <i className="fa-solid fa-2"></i>
                       </span>
                     </div>
                     <div>
