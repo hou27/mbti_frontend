@@ -60,7 +60,6 @@ export default function SearchUserResult({ name, color }) {
       item.myResult.map((mbti) => mbti.mbti)
     );
     sortedMbti = mbtiArr.map((item) => getSortedMbti(item));
-    console.log(sortedMbti);
   }
   // console.log(loading, data, called);
   return (

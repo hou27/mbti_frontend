@@ -6,8 +6,17 @@ import { useMe } from "../hooks/useMe.js";
 import { loggedInFlag } from "../apollo.js";
 import { useUserProfile } from "../hooks/useUserProfile.js";
 import getSortedMbti from "../utils/getSortedMbti.js";
+import { shareKakaoLink } from "../hooks/shareKakaoLink.js";
 
 export default function Profile({ match, history }) {
+  // Init Kakao api
+  // @ts-ignore
+  if (!window.Kakao.isInitialized()) {
+    // @ts-ignore
+    window.Kakao.init(process.env.REACT_APP_JS_KEY);
+    // @ts-ignore
+    console.log(window.Kakao.isInitialized());
+  }
   const userId = +match.params.id;
   let userInfo,
     meInfo,
@@ -39,6 +48,10 @@ export default function Profile({ match, history }) {
     sortedMbti = getSortedMbti(myResultArr);
     variety = new Set(myResultArr);
   }
+
+  const onShareKakaoClick = () => {
+    shareKakaoLink(userId);
+  };
 
   return (
     <>
@@ -100,8 +113,7 @@ export default function Profile({ match, history }) {
                       <Link
                         to={
                           !meLoading && !userLoading
-                            ? match.params.id === "0" ||
-                              meInfo?.email === userInfo?.email
+                            ? meInfo?.email === userInfo?.email
                               ? "/admin/editprofile"
                               : {
                                   pathname: `/research/${userId}`,
@@ -114,13 +126,24 @@ export default function Profile({ match, history }) {
                           type="button"
                         >
                           {!meLoading && !userLoading
-                            ? match.params.id === "0" ||
-                              meInfo?.email === userInfo?.email
+                            ? meInfo?.email === userInfo?.email
                               ? "프로필 편집"
                               : "검사하기"
                             : "Loading..."}
                         </button>
                       </Link>
+                      {!meLoading && !userLoading ? (
+                        meInfo?.email === userInfo?.email ? (
+                          <button
+                            id="kakao-link-btn"
+                            className="bg-lightBlue-500 active:bg-lightBlue-600 uppercase text-white font-bold hover:shadow-md shadow text-xs px-4 py-2 rounded outline-none focus:outline-none sm:mr-2 mb-1 ease-linear transition-all duration-150"
+                            type="button"
+                            onClick={onShareKakaoClick}
+                          >
+                            share
+                          </button>
+                        ) : null
+                      ) : null}
                     </div>
                   </div>
                   <div className="w-full lg:w-4/12 px-4 lg:order-1">
