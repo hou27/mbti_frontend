@@ -9,6 +9,7 @@ import { LOCALSTORAGE_TESTPAGEID, LOCALSTORAGE_TOKEN } from "../../localKey";
 
 export default function Login({ userId }) {
   const history = useHistory();
+  console.log(history);
   const {
     register,
     getValues,

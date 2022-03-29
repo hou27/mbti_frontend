@@ -28,7 +28,7 @@ export default function Profile({ match, history }) {
   const { data: userData, loading: userLoading } = useUserProfile(userId);
 
   if (!loggedInFlag()) {
-    history.push("/auth/login");
+    history.replace("/auth/login"); // fix lock err
   } else if (!meLoading) {
     const { me } = meData;
     if (me) {
