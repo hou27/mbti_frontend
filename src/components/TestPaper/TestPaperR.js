@@ -32,10 +32,7 @@ export default function TestPaperR({ question: q }) {
                 <i className="fas fa-rocket text-xl"></i>
               </div>
               <h3 className="text-3xl font-semibold">Let's check it out!</h3>
-              <p className="mt-4 text-lg leading-relaxed text-blueGray-500">
-                진짜 재밌는데? 이거 하고 다른 친구들한테 링크 공유할까? 프로필
-                들어가면 공유할 수 있는 버튼이 있을 것 같아!
-              </p>
+
               <ul className="list-none mt-6">
                 <li className="py-2">
                   <div className="flex items-center">

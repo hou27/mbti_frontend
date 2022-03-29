@@ -39,9 +39,7 @@ export default function TestPaperL({ question: q }) {
                 <i className="fas fa-rocket text-xl"></i>
               </div>
               <h3 className="text-3xl font-semibold">Check other's MBTI</h3>
-              <p className="mt-4 text-lg leading-relaxed text-blueGray-500">
-                아 설레 너무 재밌다 다른 사람 MBTI 검사를 내가 하는 건 처음이야!
-              </p>
+
               <ul className="list-none mt-6">
                 <li className="py-2">
                   <div className="flex items-center">
