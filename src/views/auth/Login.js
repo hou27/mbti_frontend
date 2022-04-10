@@ -2,14 +2,22 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import { useHistory } from "react-router-dom";
 import { Link } from "react-router-dom";
-import { jwtTokenVar, loggedInFlag } from "../../apollo";
+import {
+  jwtAccessTokenVar,
+  jwtRefreshTokenVar,
+  loggedInFlag,
+} from "../../apollo";
 import { FormError } from "../../components/formError";
 import { useLogin } from "../../hooks/useLogin";
-import { LOCALSTORAGE_TESTPAGEID, LOCALSTORAGE_TOKEN } from "../../localKey";
+import {
+  LOCALSTORAGE_TESTPAGEID,
+  LOCALSTORAGE_TOKEN,
+  REFRESH_TOKEN,
+} from "../../localKey";
 
 export default function Login({ userId }) {
   const history = useHistory();
-  console.log(history);
+
   const {
     register,
     getValues,
@@ -20,11 +28,13 @@ export default function Login({ userId }) {
   });
   const onCompleted = (data) => {
     const {
-      login: { ok, token },
+      login: { ok, access_token, refresh_token },
     } = data;
-    if (ok && token) {
-      localStorage.setItem(LOCALSTORAGE_TOKEN, token);
-      jwtTokenVar(token);
+    if (ok && access_token && refresh_token) {
+      localStorage.setItem(LOCALSTORAGE_TOKEN, access_token);
+      localStorage.setItem(REFRESH_TOKEN, refresh_token);
+      jwtAccessTokenVar(access_token);
+      jwtRefreshTokenVar(refresh_token);
       loggedInFlag(true);
 
       if (localStorage.getItem(LOCALSTORAGE_TESTPAGEID)) {

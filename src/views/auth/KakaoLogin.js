@@ -3,8 +3,16 @@ import React, { useEffect } from "react";
 import { gql, useMutation } from "@apollo/client";
 import { useHistory } from "react-router-dom";
 import { FormError } from "../../components/formError";
-import { LOCALSTORAGE_TESTPAGEID, LOCALSTORAGE_TOKEN } from "../../localKey";
-import { jwtTokenVar, loggedInFlag } from "../../apollo";
+import {
+  LOCALSTORAGE_TESTPAGEID,
+  LOCALSTORAGE_TOKEN,
+  REFRESH_TOKEN,
+} from "../../localKey";
+import {
+  jwtAccessTokenVar,
+  jwtRefreshTokenVar,
+  loggedInFlag,
+} from "../../apollo";
 import qs from "qs";
 
 const LOGIN_WITH_KAKAO_MUTATION = gql`
@@ -12,7 +20,8 @@ const LOGIN_WITH_KAKAO_MUTATION = gql`
     loginWithKakao(input: $loginWithKakaoInput) {
       ok
       error
-      token
+      access_token
+      refresh_token
     }
   }
 `;
@@ -22,11 +31,13 @@ export default function KakaoLogin({ location }) {
 
   const onCompleted = (data, error) => {
     const {
-      loginWithKakao: { ok, token },
+      loginWithKakao: { ok, access_token, refresh_token },
     } = data;
-    if (ok && token) {
-      localStorage.setItem(LOCALSTORAGE_TOKEN, token);
-      jwtTokenVar(token);
+    if (ok && access_token && refresh_token) {
+      localStorage.setItem(LOCALSTORAGE_TOKEN, access_token);
+      localStorage.setItem(REFRESH_TOKEN, refresh_token);
+      jwtAccessTokenVar(access_token);
+      jwtRefreshTokenVar(refresh_token);
       loggedInFlag(true);
 
       if (localStorage.getItem(LOCALSTORAGE_TESTPAGEID)) {
