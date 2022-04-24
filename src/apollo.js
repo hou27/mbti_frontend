@@ -11,7 +11,7 @@ import { setContext } from "@apollo/client/link/context";
 import { LOCALSTORAGE_TOKEN, REFRESH_TOKEN } from "./localKey";
 import { getCookie } from "./utils/cookie";
 import { onError } from "@apollo/client/link/error";
-import { GetNewToken } from "./hooks/refreshToken";
+import { getRefreshedAccessToken } from "./hooks/refreshToken";
 
 const URI = "http://192.168.219.100:4000/graphql";
 const access_token = localStorage.getItem(LOCALSTORAGE_TOKEN);
@@ -35,8 +35,6 @@ const authLink = setContext((_, { headers }) => {
     headers: {
       ...headers,
       authorization: jwtAccessTokenVar() ? `Bearer ${jwtAccessTokenVar()}` : "",
-      // "x-jwt": jwtAccessTokenVar() || "",
-      // "refresh-jwt": jwtRefreshTokenVar() || "",
     },
   };
 });
@@ -53,47 +51,21 @@ const linkOnError = onError(
           // Apollo Server sets code to UNAUTHENTICATED
           // when an AuthenticationError is thrown in a resolver
           case "jwt expired":
-            return fromPromise(
-              GetNewToken().catch((error) => {
-                // Handle token refresh errors e.g clear stored tokens, redirect to login
-                return;
-              })
-            )
-              .filter((value) => Boolean(value))
-              .flatMap((accessToken) => {
-                const oldHeaders = operation.getContext().headers;
-                // modify the operation context with a new token
-                operation.setContext({
-                  headers: {
-                    ...oldHeaders,
-                    authorization: `Bearer ${accessToken}`,
-                  },
-                });
-
-                // retry the request, returning the new observable
-                return forward(operation);
-              });
-          // refreshTokenMutation({
-          //   variables: {
-          //     refreshTokenInput: {
-          //       refresh_token: jwtRefreshTokenVar(),
-          //     },
-          //   },
-          // });
-          // useRefreshToken();
-          // Modify the operation context with a new token
-          // const oldHeaders = operation.getContext().headers;
-          // console.log(jwtAccessTokenVar());
-          // operation.setContext({
-          //   headers: {
-          //     ...oldHeaders,
-          //     authorization: GetNewToken()
-          //       ? `Bearer ${jwtAccessTokenVar()}`
-          //       : "",
-          //   },
-          // });
-          // // Retry the request, returning the new observable
-          // return forward(operation);
+            // Modify the operation context with a new token
+            const oldHeaders = operation.getContext().headers;
+            console.log(jwtAccessTokenVar());
+            operation.setContext(async () => {
+              return {
+                headers: {
+                  ...oldHeaders,
+                  authorization: (await getRefreshedAccessToken())
+                    ? `Bearer ${jwtAccessTokenVar()}`
+                    : "",
+                },
+              };
+            });
+            // Retry the request, returning the new observable
+            return forward(operation);
         }
       }
     }
