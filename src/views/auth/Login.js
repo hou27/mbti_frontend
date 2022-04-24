@@ -14,6 +14,7 @@ import {
   LOCALSTORAGE_TOKEN,
   REFRESH_TOKEN,
 } from "../../localKey";
+import { setCookie } from "../../utils/cookie";
 
 export default function Login({ userId }) {
   const history = useHistory();
@@ -33,10 +34,15 @@ export default function Login({ userId }) {
     if (ok && access_token && refresh_token) {
       localStorage.setItem(LOCALSTORAGE_TOKEN, access_token);
       localStorage.setItem(REFRESH_TOKEN, refresh_token);
+      // setCookie(REFRESH_TOKEN, refresh_token, {
+      //   path: "/",
+      //   secure: true,
+      //   httpOnly: true,
+      // });
       jwtAccessTokenVar(access_token);
       jwtRefreshTokenVar(refresh_token);
       loggedInFlag(true);
-
+      alert(jwtAccessTokenVar());
       if (localStorage.getItem(LOCALSTORAGE_TESTPAGEID)) {
         localStorage.removeItem(LOCALSTORAGE_TESTPAGEID);
       } else history.push("/"); //history.goBack();

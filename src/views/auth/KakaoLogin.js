@@ -14,6 +14,7 @@ import {
   loggedInFlag,
 } from "../../apollo";
 import qs from "qs";
+import { setCookie } from "../../utils/cookie";
 
 const LOGIN_WITH_KAKAO_MUTATION = gql`
   mutation loginWithKakao($loginWithKakaoInput: LoginWithKakaoInput!) {
@@ -36,6 +37,11 @@ export default function KakaoLogin({ location }) {
     if (ok && access_token && refresh_token) {
       localStorage.setItem(LOCALSTORAGE_TOKEN, access_token);
       localStorage.setItem(REFRESH_TOKEN, refresh_token);
+      // setCookie(REFRESH_TOKEN, refresh_token, {
+      //   path: "/",
+      //   secure: true,
+      //   httpOnly: true,
+      // });
       jwtAccessTokenVar(access_token);
       jwtRefreshTokenVar(refresh_token);
       loggedInFlag(true);

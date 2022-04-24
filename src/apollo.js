@@ -4,20 +4,21 @@ import {
   createHttpLink,
   InMemoryCache,
   makeVar,
-  split,
+  from,
+  fromPromise,
 } from "@apollo/client";
 import { setContext } from "@apollo/client/link/context";
 import { LOCALSTORAGE_TOKEN, REFRESH_TOKEN } from "./localKey";
 import { getCookie } from "./utils/cookie";
 import { onError } from "@apollo/client/link/error";
-import { useRefreshToken } from "./hooks/refreshToken";
+import { GetNewToken } from "./hooks/refreshToken";
 
 const URI = "http://192.168.219.100:4000/graphql";
 const access_token = localStorage.getItem(LOCALSTORAGE_TOKEN);
-const refresh_token =
-  /*document.cookie
+const refresh_token = localStorage.getItem(REFRESH_TOKEN);
+/*document.cookie
   .split(`${REFRESH_TOKEN}=`)[1]
-  .split(";")[0];*/ getCookie(REFRESH_TOKEN);
+  .split(";")[0]; getCookie(REFRESH_TOKEN);*/
 export const jwtAccessTokenVar = makeVar(access_token);
 export const jwtRefreshTokenVar = makeVar(refresh_token);
 export const loggedInFlag = makeVar(Boolean(access_token));
@@ -33,15 +34,81 @@ const authLink = setContext((_, { headers }) => {
   return {
     headers: {
       ...headers,
-      "x-jwt": jwtAccessTokenVar() || "",
+      authorization: jwtAccessTokenVar() ? `Bearer ${jwtAccessTokenVar()}` : "",
+      // "x-jwt": jwtAccessTokenVar() || "",
       // "refresh-jwt": jwtRefreshTokenVar() || "",
     },
   };
 });
 
+const linkOnError = onError(
+  ({ graphQLErrors, networkError, operation, forward }) => {
+    console.log("on error works");
+    if (graphQLErrors) {
+      console.log(graphQLErrors);
+      // const refreshTokenMutation = useRefreshToken(onCompleted);
+      for (let err of graphQLErrors) {
+        const errMsg = err.message; //.extensions.exception;
+        switch (errMsg) {
+          // Apollo Server sets code to UNAUTHENTICATED
+          // when an AuthenticationError is thrown in a resolver
+          case "jwt expired":
+            return fromPromise(
+              GetNewToken().catch((error) => {
+                // Handle token refresh errors e.g clear stored tokens, redirect to login
+                return;
+              })
+            )
+              .filter((value) => Boolean(value))
+              .flatMap((accessToken) => {
+                const oldHeaders = operation.getContext().headers;
+                // modify the operation context with a new token
+                operation.setContext({
+                  headers: {
+                    ...oldHeaders,
+                    authorization: `Bearer ${accessToken}`,
+                  },
+                });
+
+                // retry the request, returning the new observable
+                return forward(operation);
+              });
+          // refreshTokenMutation({
+          //   variables: {
+          //     refreshTokenInput: {
+          //       refresh_token: jwtRefreshTokenVar(),
+          //     },
+          //   },
+          // });
+          // useRefreshToken();
+          // Modify the operation context with a new token
+          // const oldHeaders = operation.getContext().headers;
+          // console.log(jwtAccessTokenVar());
+          // operation.setContext({
+          //   headers: {
+          //     ...oldHeaders,
+          //     authorization: GetNewToken()
+          //       ? `Bearer ${jwtAccessTokenVar()}`
+          //       : "",
+          //   },
+          // });
+          // // Retry the request, returning the new observable
+          // return forward(operation);
+        }
+      }
+    }
+
+    // To retry on network errors, we recommend the RetryLink
+    // instead of the onError link. This just logs the error.
+    if (networkError) {
+      console.log(`[Network error]: ${networkError}`);
+    }
+  }
+);
+
 export const client = new ApolloClient({
   // uri: URI,
-  link: authLink.concat(httpLink),
+  link: from([linkOnError, authLink.concat(httpLink)]),
   cache: new InMemoryCache({
     typePolicies: {
       Query: {
@@ -60,60 +127,4 @@ export const client = new ApolloClient({
       },
     },
   }),
-});
-
-const onCompleted = (data) => {
-  const {
-    refreshToken: { ok, access_token, refresh_token },
-  } = data;
-  if (ok && access_token && refresh_token) {
-    localStorage.setItem(LOCALSTORAGE_TOKEN, access_token);
-    jwtAccessTokenVar(access_token);
-    jwtRefreshTokenVar(refresh_token);
-    loggedInFlag(true);
-  }
-};
-
-onError(({ graphQLErrors, networkError, operation, forward }) => {
-  console.log("dsafadsf");
-  if (graphQLErrors) {
-    console.log(graphQLErrors);
-    const [
-      refreshTokenMutation,
-      { data: refreshTokenMutationResult, loading },
-    ] = useRefreshToken(onCompleted);
-    for (let err of graphQLErrors) {
-      switch (err.extensions.code) {
-        // Apollo Server sets code to UNAUTHENTICATED
-        // when an AuthenticationError is thrown in a resolver
-        case "UNAUTHENTICATED":
-          if (!loading) {
-            refreshTokenMutation({
-              variables: {
-                refreshTokenInput: {
-                  refresh_token: jwtRefreshTokenVar(),
-                },
-              },
-            });
-          }
-          // Modify the operation context with a new token
-          const oldHeaders = operation.getContext().headers;
-          console.log(jwtAccessTokenVar());
-          operation.setContext({
-            headers: {
-              ...oldHeaders,
-              "x-jwt": jwtAccessTokenVar(),
-            },
-          });
-          // Retry the request, returning the new observable
-          return forward(operation);
-      }
-    }
-  }
-
-  // To retry on network errors, we recommend the RetryLink
-  // instead of the onError link. This just logs the error.
-  if (networkError) {
-    console.log(`[Network error]: ${networkError}`);
-  }
 });

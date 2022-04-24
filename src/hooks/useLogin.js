@@ -5,7 +5,8 @@ const LOGIN_MUTATION = gql`
     login(input: $loginInput) {
       ok
       error
-      token
+      access_token
+      refresh_token
     }
   }
 `;
