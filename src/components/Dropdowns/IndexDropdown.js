@@ -6,6 +6,7 @@ import { loggedInFlag } from "../../apollo";
 
 const IndexDropdown = () => {
   const { data, loading } = useMe();
+  console.log(data);
 
   // dropdown props
   const [dropdownPopoverShow, setDropdownPopoverShow] = React.useState(false);

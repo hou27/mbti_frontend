@@ -1,4 +1,4 @@
-import { gql, useMutation } from "@apollo/client";
+import { gql } from "@apollo/client";
 import {
   client,
   jwtAccessTokenVar,
@@ -6,7 +6,6 @@ import {
   loggedInFlag,
 } from "../apollo";
 import { LOCALSTORAGE_TOKEN, REFRESH_TOKEN } from "../localKey";
-import { setCookie } from "../utils/cookie";
 
 const REFRESH_TOKEN_MUTATION = gql`
   mutation refreshTokenMutation($refreshTokenInput: RefreshTokenInput!) {

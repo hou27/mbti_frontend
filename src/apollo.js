@@ -39,33 +39,53 @@ const authLink = setContext((_, { headers }) => {
   };
 });
 
+async function retryRequestWithNewToken(operation, forward) {
+  const oldHeaders = operation.getContext().headers;
+  const refreshed_access_token = await getRefreshedAccessToken();
+  operation.setContext(() => {
+    return {
+      headers: {
+        ...oldHeaders,
+        authorization: refreshed_access_token
+          ? `Bearer ${refreshed_access_token}`
+          : "",
+      },
+    };
+  });
+  // Retry the request, returning the new observable
+  console.log(operation.getContext().headers);
+  forward(operation);
+}
+
 const linkOnError = onError(
   ({ graphQLErrors, networkError, operation, forward }) => {
     console.log("on error works");
     if (graphQLErrors) {
       console.log(graphQLErrors);
-      // const refreshTokenMutation = useRefreshToken(onCompleted);
       for (let err of graphQLErrors) {
-        const errMsg = err.message; //.extensions.exception;
+        const errMsg = err.message;
         switch (errMsg) {
-          // Apollo Server sets code to UNAUTHENTICATED
+          // Apollo Server sets errMsg to jwt expired
           // when an AuthenticationError is thrown in a resolver
           case "jwt expired":
             // Modify the operation context with a new token
+            retryRequestWithNewToken(operation, forward);
+          /*
             const oldHeaders = operation.getContext().headers;
-            console.log(jwtAccessTokenVar());
             operation.setContext(async () => {
+              const refreshed_access_token = await getRefreshedAccessToken();
               return {
                 headers: {
                   ...oldHeaders,
-                  authorization: (await getRefreshedAccessToken())
-                    ? `Bearer ${jwtAccessTokenVar()}`
+                  authorization: refreshed_access_token
+                    ? `Bearer ${refreshed_access_token}`
                     : "",
                 },
               };
             });
             // Retry the request, returning the new observable
             return forward(operation);
+            */
         }
       }
     }
