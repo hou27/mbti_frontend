@@ -47,16 +47,12 @@
   ],
   "iarc_rating_id": "e84b072d-71b3-4d3e-86ae-31a8ce4e53b7",
   "share_target": {
-    "action": "/?homescreen=1&share-target=1",
-    "method": "POST",
-    "enctype": "multipart/form-data",
+    "action": "/share-target/",
+    "method": "GET",
     "params": {
-      "files": [
-        {
-          "name": "file",
-          "accept": ["image/png", ".png"]
-        }
-      ]
+      "title": "title",
+      "text": "text",
+      "url": "url"
     }
   }
 }
